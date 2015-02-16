@@ -1,7 +1,6 @@
-# sim-city-web
+# Web interface to SIM-CITY
 
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.11.1.
+Contains a Python JSON webservice and a Grunt/Angular website.
 
 ## Build & development
 

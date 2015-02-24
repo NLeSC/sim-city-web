@@ -7,7 +7,7 @@ angular.module('simCityWebApp')
       tasksAdded: [],
     });
 
-    MessageBus.subscribe('task.submitted', function(task) {
+    MessageBus.subscribe('task.submitted', function(event, task) {
       $scope.tasksAdded.push(task);
     });
 }]);

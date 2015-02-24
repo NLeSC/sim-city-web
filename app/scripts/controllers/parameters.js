@@ -4,8 +4,12 @@
 
 angular.module('simCityWebApp')
 .controller('ParameterListCtrl', ['$scope', '$http', 'MessageBus', 'SimCityWebService', function ($scope, $http, SimCityWebService, MessageBus) {
+  MessageBus.subscribe('task.failed', function(event, msg) {
+    $scope.errorMsg = msg.formatted;
+  });
+
   angular.extend($scope, {
-    startSimulation: function() {
+    submitSimulation: function() {
       $scope.showLoader = true;
       $scope.showSuccess = false;
       delete $scope.statusMsg;
@@ -18,9 +22,6 @@ angular.module('simCityWebApp')
         finally(function () {
           $scope.showLoader = false;
         });
-      MessageBus.subscribe('task.failed', function(msg) {
-        $scope.errorMsg = msg.message + ' ' + msg.httpStatusMsg;
-      });
     },
     input: {},
   });

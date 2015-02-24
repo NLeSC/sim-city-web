@@ -11,8 +11,7 @@ angular.module('simCityWebApp')
     MessageBus.subscribe('job.maxed', function() {
       $scope.statusMsg = 'Already enough jobs running';
     });
-    MessageBus.subscribe('job.failed', function(msg) {
-      console.log(msg);
+    MessageBus.subscribe('job.failed', function(event, msg) {
       $scope.errorMsg = msg.formatted;
     });
 

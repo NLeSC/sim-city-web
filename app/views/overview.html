@@ -2,13 +2,13 @@
   <tr>
     <th colspan="2">Tasks</th>
   </tr>
-  <tr ng-repeat="task in tasks">
+  <tr ng-repeat="task in tasks" animate-on-change="{{task.value}}">
     <td>{{task.name}}</td><td>{{task.value}}</td>
   </tr>
   <tr>
     <th colspan="2">Jobs</th>
   </tr>
-  <tr ng-repeat="job in jobs">
+  <tr ng-repeat="job in jobs" animate-on-change="{{job.value}}">
     <td>{{job.name}}</td><td>{{job.value}}</td>
   </tr>
 </table>

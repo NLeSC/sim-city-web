@@ -1,3 +1,5 @@
+(function () {
+
 'use strict';
 
 angular.module('simCityWebApp')
@@ -48,4 +50,17 @@ angular.module('simCityWebApp')
 
     //invoke initialy
     this.loadOverview();
+}]).
+directive('animateOnChange', ['$animate', function($animate) {
+  return function(scope, elem, attr) {
+      scope.$watch(attr.animateOnChange, function(newValue, oldValue) {
+        if (newValue !== oldValue) {
+          $animate.addClass(elem, 'change', function() {
+            $animate.removeClass(elem, 'change');
+          });
+        }
+      });
+    };
 }]);
+
+})();

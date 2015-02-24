@@ -1,10 +1,8 @@
 <div id="startjob">
-  {{errorMsg}}
   <button type="button" class="btn btn-primary" ng-click="startJob()">Start job</button>
   <img src="images/ajax-loader.gif" ng-show="showLoader">
   <img src="images/green-checkmark.gif" ng-show="showSuccess">
-  {{errorMsg}}
-  <div ng-show="errorMsg" class="text-center">
+  <div ng-show="errorMsg" class="danger text-center">
     Error: {{errorMsg}}
   </div>
   <div ng-show="statusMsg" class="info text-center">

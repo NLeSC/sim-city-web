@@ -28,7 +28,6 @@ angular.module('simCityWebApp')
           minZoom: 4,
         },
       },
-      controls: [{name: 'zoom', active: true}],
       osm: {
         source: {
           type: 'OSM'

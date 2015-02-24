@@ -3,13 +3,13 @@
 'use strict';
 
 angular.module('simCityWebApp')
-.controller('ParameterListCtrl', ['$scope', '$http', 'MessageBus', 'SimCityWebService', function ($scope, $http, SimCityWebService, MessageBus) {
+.controller('ParameterListCtrl', ['$scope', '$http', 'MessageBus', 'SimCityWebService', function ($scope, $http, MessageBus, SimCityWebService) {
   MessageBus.subscribe('task.failed', function(event, msg) {
     $scope.errorMsg = msg.formatted;
   });
 
   angular.extend($scope, {
-    submitSimulation: function() {
+    startSimulation: function() {
       $scope.showLoader = true;
       $scope.showSuccess = false;
       delete $scope.statusMsg;

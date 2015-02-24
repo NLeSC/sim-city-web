@@ -69,13 +69,37 @@ module.exports = function (grunt) {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
-        livereload: 35729
+        livereload: 35729,
+        middleware: function (connect) {
+          return [
+             function(req, res, next) {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Methods', '*');
+                return next();
+              },
+              connect.static('.tmp'),
+              connect().use(
+                '/bower_components',
+                connect.static('./bower_components')
+              ),
+              connect().use(
+                '/app/styles',
+                connect.static('./app/styles')
+              ),
+              connect.static(appConfig.app)
+	];
+	}
       },
       livereload: {
         options: {
           open: true,
           middleware: function (connect) {
             return [
+             function(req, res, next) {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Methods', '*');
+                return next();
+              },
               connect.static('.tmp'),
               connect().use(
                 '/bower_components',
@@ -95,6 +119,11 @@ module.exports = function (grunt) {
           port: 9001,
           middleware: function (connect) {
             return [
+             function(req, res, next) {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Methods', '*');
+                return next();
+              },
               connect.static('.tmp'),
               connect.static('test'),
               connect().use(

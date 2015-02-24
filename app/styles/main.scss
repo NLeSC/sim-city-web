@@ -14,6 +14,21 @@ body {
   padding: 0;
 }
 
+td.number {
+  text-align: right;
+}
+
+.angular-openlayers-map {
+  width: 640px;
+  height: 480px;
+}
+
+#startjob {
+  padding-left: 45px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,

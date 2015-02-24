@@ -1,0 +1,22 @@
+<form class="form-horizontal" ng-show="parameters">
+  <fieldset>
+    <legend>Simulation parameters</legend>
+    <div ng-repeat="param in parameters track by name">
+      <div class="control-group">
+        <label class="control-label" for="param-{{param.name}}">{{param.name}}</label>
+        <div class="controls">
+          <!-- Interval -->
+          <input ng-show="param.type == 'interval'" ng-model="input[param.name]" id="param-{{param.name}}" name="{{param.name}}" type="{{param.dtype == 'str' ? 'text' : 'number'}}" placeholder="{{param.default}}" class="form-control">
+          <!-- Choice -->
+          <select ng-show="param.type == 'choice'" ng-options="choice for choice in param.choices" ng-model="input[param.name]" id="param-{{param.name}}" name="{{param.name}}" class="form-control"></select>
+          <p class="help-block" ng-show="param.description">{{param.description}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls">
+        <input type="submit" class="submit btn btn-primary" ng-click="startSimulation()">
+        <img src="images/ajax-loader.gif" ng-show="showLoader"><img src="images/green-checkmark.gif" ng-show="showSuccess">
+      </div>
+  </fieldset>
+</form>

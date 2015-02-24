@@ -1,0 +1,6 @@
+<div ng-show="tasksAdded.length > 0">
+  Submitted:
+  <div class="list-group" ng-repeat="task in tasksAdded track by task.name">
+    <a href="{{task.url}}" class="list-group-item">{{task.name}}</a>
+  </div>
+</div>

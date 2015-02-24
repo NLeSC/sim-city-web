@@ -12,5 +12,6 @@ angular
   .module('simCityWebApp', [
     'ngAnimate',
     'ngCookies',
-    'ngResource'
+    'ngResource',
+    'openlayers-directive'
   ]);

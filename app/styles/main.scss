@@ -23,10 +23,13 @@ td.number {
   height: 480px;
 }
 
-#startjob {
-  padding-left: 45px;
-  padding-top: 6px;
-  padding-bottom: 6px;
+.startjob {
+  padding: 6px;
+}
+
+.btn-startjob {
+  margin-left: 39px;
+}
 
 .change {
     background-color: red;

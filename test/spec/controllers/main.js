@@ -17,6 +17,6 @@ describe('Controller: MainCtrl', function () {
   }));
 
   it('should attach a list of irieSomething to the scope', function () {
-    expect(scope.irieSomething.length).toBe(1);
+    expect(scope.startJob).toBeDefined();
   });
 });

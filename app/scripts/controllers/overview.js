@@ -8,6 +8,7 @@ angular.module('simCityWebApp')
       jobs: [{name: 'Loading...', value: ''}],
       tasks: [{name: 'Loading...', value: ''}]
     });
+
     /**
       * Loads and populates the notifications
       */

@@ -51,13 +51,16 @@
       <h1 class="navbar-brand">SIM-CITY Web</h1>
     </div>
 
-    <div class="panel panel-default pull-right">
+    <div class="infrastructure-panel panel panel-default pull-right">
       <div class="panel-heading">
-        <h3 class="panel-title">Simulation overview</h3>
+        <a class="btn" type="button" data-toggle="collapse" href=".infrastructureoverview" aria-expanded="false" aira-controls=".infrastructureoverview"><span class="glyphicon glyphicon-tasks"></span></a>
+        <h3 class="panel-title infrastructure-title"><span class="infrastructureoverview collapse in">Infrastructure</span></h3>
       </div>
-      <div ng-include="'views/tasks.html'" ng-controller="TaskListCtrl"></div>
-      <div ng-include="'views/overview.html'" ng-controller="OverviewCtrl"></div>
-      <div ng-include="'views/main.html'" ng-controller="MainCtrl"></div>
+      <div class="infrastructureoverview infrastructure-body collapse in">
+        <div ng-include="'views/tasks.html'" ng-controller="TaskListCtrl"></div>
+        <div ng-include="'views/overview.html'" ng-controller="OverviewCtrl"></div>
+        <div ng-include="'views/main.html'" ng-controller="MainCtrl"></div>
+      </div>
     </div>
 
     <div class="container">

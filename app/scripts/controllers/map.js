@@ -13,43 +13,44 @@ angular.module('simCityWebApp')
       bangalore: {
         lat: 12.97194,
         lon: 77.59369,
-        zoom: 11
+        zoom: 11,
       },
       defaults: {
         interactions: {
-          mouseWheelZoom: true
+          mouseWheelZoom: true,
         },
         controls: {
           zoom: true,
-          attribution: false
+          attribution: false,
         },
         view: {
           maxZoom: 18,
           minZoom: 4,
+          projection: 'EPSG:900913',
         },
       },
       osm: {
         source: {
-          type: 'OSM'
-        }
+          type: 'OSM',
+        },
       },
       roads: {
         source: {
           type: 'TileWMS',
           url: '/geoserver/wms',
           params: {
-            'LAYERS': 'Bangalore:blr_roads'
+            'LAYERS': 'Bangalore:blr_roads',
+            'TILED': true,
           },
-          projection: 'EPSG:24372'
-        }
+        },
       },
       bingroad: {
         source: {
             name: 'Bing Maps',
             type: 'BingMaps',
             key: 'AsP2TER1bj7tMZGuQtDkvWtX9vOezdG3zbeJp3tOv8d1Q4XrDLd6bEMz_nFsmcKi',
-            imagerySet: 'Road'
-          }
+            imagerySet: 'Road',
+          },
       },
       bingsat: {
         source: {
@@ -57,8 +58,8 @@ angular.module('simCityWebApp')
             type: 'BingMaps',
             key: 'AsP2TER1bj7tMZGuQtDkvWtX9vOezdG3zbeJp3tOv8d1Q4XrDLd6bEMz_nFsmcKi',
             imagerySet: 'Aerial'
-          }
-      }
+          },
+      },
     });
 //
 //   var map;

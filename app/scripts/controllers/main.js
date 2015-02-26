@@ -2,6 +2,16 @@
 
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name simCityWebApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of the simCityWebApp
+ */
+angular.module('simCityWebApp')
+  .controller('MainCtrl', MainController);
+
 function MainController($scope, SimCityWebService, MessageBus) {
   MessageBus.subscribe('job.maxed', function() {
     $scope.statusMsg = 'Already enough jobs running';
@@ -29,13 +39,4 @@ function MainController($scope, SimCityWebService, MessageBus) {
   });
 }
 
-/**
- * @ngdoc function
- * @name simCityWebApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of the simCityWebApp
- */
-angular.module('simCityWebApp')
-  .controller('MainCtrl', ['$scope', 'SimCityWebService', 'MessageBus', MainController]);
 })();

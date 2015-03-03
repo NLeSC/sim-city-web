@@ -3,20 +3,28 @@
     <legend>Simulation parameters</legend>
     <div ng-repeat="param in parameters track by name">
       <div class="control-group">
-        <label class="control-label" for="param-{{param.name}}">{{param.name}}</label>
+        <label class="control-label" for="param-{{param.name}}" ng-bind="param.name"></label>
         <div class="controls">
           <!-- Interval -->
-          <input ng-show="param.type == 'interval'" ng-model="input[param.name]" id="param-{{param.name}}" name="{{param.name}}" type="{{param.dtype == 'str' ? 'text' : 'number'}}" placeholder="{{param.default}}" class="form-control">
+          <div ng-show="param.type == 'interval'" ng-switch="param.dtype">
+            <input ng-switch-when="str" type="text" ng-model="input[param.name]" id="param-{{param.name}}" name="{{param.name}}" placeholder="{{param.default}}" class="form-control">
+            <input ng-switch-default type="number" min="{{param.min}}" max="{{param.max}}" ng-model="input[param.name]" id="param-{{param.name}}" name="{{param.name}}" placeholder="{{param.default}}" class="form-control">
+          </div>
           <!-- Choice -->
           <select ng-show="param.type == 'choice'" ng-options="choice for choice in param.choices" ng-model="input[param.name]" id="param-{{param.name}}" name="{{param.name}}" class="form-control"></select>
-          <p class="help-block" ng-show="param.description">{{param.description}}</p>
+          <p class="help-block" ng-bind="param.description"></p>
         </div>
       </div>
     </div>
     <div class="control-group">
       <div class="controls">
-        <input type="submit" class="submit btn btn-primary" ng-click="startSimulation()">
-        <img src="images/ajax-loader.gif" ng-show="showLoader"><img src="images/green-checkmark.gif" ng-show="showSuccess">
+        <button type="submit" data-style="expand-right" class="submit btn btn-primary" ng-click="startSimulation()">
+          Start simulation
+          <span ng-switch="submitstatus">
+            <span class="glyphicon glyphicon-ok" ng-switch-when="success"></span>
+            <img src="images/ajax-loader.gif" ng-switch-when="loading" ng-cloak>
+          </span>
+        </button>
       </div>
   </fieldset>
 </form>

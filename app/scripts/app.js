@@ -15,7 +15,7 @@ angular.
     'ngAnimate',
     'ngCookies',
     'ngResource',
-    'openlayers-directive'
+    'openlayers-directive',
   ]);
 
 })();

@@ -1,11 +1,10 @@
 <div class="startjob">
-  <button type="button" class="btn btn-primary btn-startjob" ng-click="startJob()">Start job</button>
-  <img src="images/ajax-loader.gif" ng-show="showLoader">
-  <img src="images/green-checkmark.gif" ng-show="showSuccess">
-  <div ng-show="errorMsg" class="danger text-center">
-    Error: {{errorMsg}}
-  </div>
-  <div ng-show="statusMsg" class="info text-center">
-    {{statusMsg}}
-  </div>
+  <button type="button" class="btn btn-primary btn-startjob" ng-click="vm.startJob()">Start job
+    <span ng-switch="vm.submitStatus">
+      <img src="images/ajax-loader.gif" ng-switch-when="loading">
+      <span class="glyphicon glyphicon-ok" ng-switch-when="success"></span>
+    </span>
+  </button>
+  <div ng-show="vm.errorMsg" class="danger text-center" ng-bind-template="Error: {{vm.errorMsg}}"></div>
+  <div ng-show="vm.statusMsg" class="info text-center" ng-bind="vm.statusMsg"></div>
 </div>

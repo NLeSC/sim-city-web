@@ -12,31 +12,32 @@
 angular.module('simCityWebApp')
   .controller('MainCtrl', MainController);
 
-function MainController($scope, SimCityWebService, MessageBus) {
+MainController.$inject = ['SimCityWebService', 'MessageBus'];
+function MainController(SimCityWebService, MessageBus) {
+  var vm = this;
+  vm.startJob = startJob;
+  
+  updateStatus('none');
+
+  MessageBus.subscribe('job.submitted', function(data) {
+    updateStatus('success', 'Started job ' + data.batch_id);
+  });
   MessageBus.subscribe('job.maxed', function() {
-    $scope.statusMsg = 'Already enough jobs running';
+    updateStatus('ignored', 'Already enough jobs running');
   });
   MessageBus.subscribe('job.failed', function(event, msg) {
-    $scope.errorMsg = msg.formatted;
+    updateStatus('error', null, msg.formatted);
   });
 
-  angular.extend($scope, {
-    startJob: function() {
-      $scope.showLoader = true;
-      $scope.showSuccess = false;
-      delete $scope.statusMsg;
-      delete $scope.errorMsg;
-
-      SimCityWebService.submitJob().
-        success(function(data) {
-          $scope.statusMsg = 'Started job ' + data.batch_id;
-          $scope.showSuccess = true;
-        }).
-        finally(function() {
-          $scope.showLoader = false;
-        });
-    },
-  });
+  function startJob() {
+    updateStatus('loading');
+    SimCityWebService.submitJob();
+  }
+  function updateStatus(status, msg, err) {
+    vm.submitStatus = status;
+    vm.statusMsg = msg || null;
+    vm.errorMsg = err || null;
+  }
 }
 
 })();

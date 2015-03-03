@@ -1,3 +1,5 @@
+(function(){
+
 'use strict';
 
 /**
@@ -8,10 +10,12 @@
  *
  * Main module of the application.
  */
-angular
-  .module('simCityWebApp', [
+angular.
+  module('simCityWebApp', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
-    'openlayers-directive'
+    'openlayers-directive',
   ]);
+
+})();

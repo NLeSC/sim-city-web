@@ -1,3 +1,5 @@
+(function() {
+
 'use strict';
 
 /**
@@ -7,60 +9,64 @@
  * # MainCtrl
  * Controller of the simCityWebApp
  */
-angular.module('simCityWebApp')
-  .controller('MapCtrl', ['$scope', function ($scope) {
-    angular.extend($scope, {
-      bangalore: {
-        lat: 12.97194,
-        lon: 77.59369,
-        zoom: 11,
+angular.module('simCityWebApp').controller('MapCtrl', MapController);
+
+MapController.$inject = ['$scope'];
+
+function MapController($scope) {
+  angular.extend($scope, {
+    bangalore: {
+      lat: 12.97194,
+      lon: 77.59369,
+      zoom: 11,
+    },
+    defaults: {
+      interactions: {
+        mouseWheelZoom: true,
       },
-      defaults: {
-        interactions: {
-          mouseWheelZoom: true,
+      controls: {
+        zoom: true,
+        attribution: false,
+      },
+      view: {
+        maxZoom: 18,
+        minZoom: 4,
+        projection: 'EPSG:900913',
+      },
+    },
+    osm: {
+      source: {
+        type: 'OSM',
+      },
+    },
+    roads: {
+      source: {
+        type: 'TileWMS',
+        url: '/geoserver/wms',
+        params: {
+          'LAYERS': 'Bangalore:blr_roads',
+          'TILED': true,
         },
-        controls: {
-          zoom: true,
-          attribution: false,
+      },
+    },
+    bingroad: {
+      source: {
+          name: 'Bing Maps',
+          type: 'BingMaps',
+          key: 'AsP2TER1bj7tMZGuQtDkvWtX9vOezdG3zbeJp3tOv8d1Q4XrDLd6bEMz_nFsmcKi',
+          imagerySet: 'Road',
         },
-        view: {
-          maxZoom: 18,
-          minZoom: 4,
-          projection: 'EPSG:900913',
+    },
+    bingsat: {
+      source: {
+          name: 'Bing Maps',
+          type: 'BingMaps',
+          key: 'AsP2TER1bj7tMZGuQtDkvWtX9vOezdG3zbeJp3tOv8d1Q4XrDLd6bEMz_nFsmcKi',
+          imagerySet: 'Aerial'
         },
-      },
-      osm: {
-        source: {
-          type: 'OSM',
-        },
-      },
-      roads: {
-        source: {
-          type: 'TileWMS',
-          url: '/geoserver/wms',
-          params: {
-            'LAYERS': 'Bangalore:blr_roads',
-            'TILED': true,
-          },
-        },
-      },
-      bingroad: {
-        source: {
-            name: 'Bing Maps',
-            type: 'BingMaps',
-            key: 'AsP2TER1bj7tMZGuQtDkvWtX9vOezdG3zbeJp3tOv8d1Q4XrDLd6bEMz_nFsmcKi',
-            imagerySet: 'Road',
-          },
-      },
-      bingsat: {
-        source: {
-            name: 'Bing Maps',
-            type: 'BingMaps',
-            key: 'AsP2TER1bj7tMZGuQtDkvWtX9vOezdG3zbeJp3tOv8d1Q4XrDLd6bEMz_nFsmcKi',
-            imagerySet: 'Aerial'
-          },
-      },
-    });
+    },
+  });
+}
 //
 //   var map;
 //   var tiled;
@@ -112,4 +118,5 @@ angular.module('simCityWebApp')
 //     // map.addControl(new OpenLayers.Control.MousePosition({element: $('location')}));
 //     map.zoomToExtent(bounds);
 //   }
-}]);
+
+})();

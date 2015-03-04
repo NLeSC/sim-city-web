@@ -28,6 +28,12 @@ td.number {
   padding-bottom: 5px;
 }
 
+.infrastructure-panel {
+  position: absolute;
+  right: 0;
+  z-index: 9000;
+}
+
 .infrastructure-title {
   float: right;
   padding-top: 6px;

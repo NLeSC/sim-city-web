@@ -11,16 +11,16 @@
  */
 angular.module('simCityWebApp').controller('MapCtrl', MapController);
 
-MapController.$inject = ['$scope'];
-
-function MapController($scope) {
-  angular.extend($scope, {
-    bangalore: {
+MapController.$inject = ['$http'];
+function MapController($http) {
+  var vm = this;
+  vm.addLayer = addLayer;
+  vm.bangalore = {
       lat: 12.97194,
       lon: 77.59369,
       zoom: 11,
-    },
-    defaults: {
+    };
+  vm.defaults = {
       interactions: {
         mouseWheelZoom: true,
       },
@@ -33,23 +33,35 @@ function MapController($scope) {
         minZoom: 4,
         projection: 'EPSG:900913',
       },
-    },
-    osm: {
+    };
+  vm.layerNames = [];
+  vm.layers = [
+      { name: 'bingsat',
+        source: {
+            name: 'Bing Maps',
+            type: 'BingMaps',
+            key: 'AsP2TER1bj7tMZGuQtDkvWtX9vOezdG3zbeJp3tOv8d1Q4XrDLd6bEMz_nFsmcKi',
+            imagerySet: 'Aerial'
+          },
+      }, {
+        name: 'blr_roads',
+        source: {
+          type: 'TileWMS',
+          url: '/geoserver/Bangalore/wms',
+          params: {
+            'LAYERS': 'blr_roads',
+            'TILED': true,
+          },
+        },
+      },
+    ];
+  vm.osm = {
       source: {
         type: 'OSM',
       },
-    },
-    roads: {
-      source: {
-        type: 'TileWMS',
-        url: '/geoserver/wms',
-        params: {
-          'LAYERS': 'Bangalore:blr_roads',
-          'TILED': true,
-        },
-      },
-    },
-    bingroad: {
+    };
+  vm.possibleLayers = [
+    { name: 'bingroad',
       source: {
           name: 'Bing Maps',
           type: 'BingMaps',
@@ -57,16 +69,75 @@ function MapController($scope) {
           imagerySet: 'Road',
         },
     },
-    bingsat: {
-      source: {
-          name: 'Bing Maps',
-          type: 'BingMaps',
-          key: 'AsP2TER1bj7tMZGuQtDkvWtX9vOezdG3zbeJp3tOv8d1Q4XrDLd6bEMz_nFsmcKi',
-          imagerySet: 'Aerial'
-        },
-    },
-  });
+  ];
+  vm.removeLayer = removeLayer;
+
+  updateLayerNames();
+
+  function updateLayerNames() {
+    var parser = new ol.format.WMSCapabilities();
+    $http.get('/geoserver/Bangalore/wms?request=getCapabilities')
+      .success(function(data) {
+        var result = parser.read(data);
+        var existingNames = [];
+        for (var i = 0; i < vm.layers.length; i++){
+          existingNames.push(vm.layers[i].name);
+        }
+        // Copy original array
+        var possibleLayers = vm.possibleLayers.slice();
+        var layers = result.Capability.Layer.Layer;
+        for (i = 0; i < layers.length; i++) {
+          if (existingNames.indexOf(layers[i].Name) === -1 && layers[i].queryable === true) {
+            possibleLayers.push({
+              name: layers[i].Name,
+              source: {
+                type: 'TileWMS',
+                url: '/geoserver/Bangalore/wms',
+                params: {
+                  'LAYERS': layers[i].Name,
+                  'TILED': true,
+                },
+              },
+            });
+          }
+        }
+        sort(possibleLayers);
+        vm.possibleLayers = possibleLayers;
+      });
+  }
+
+  function removeLayer() {
+    var layer = vm.currentRmLayer;
+    delete vm.currentRmLayer;
+    insertSorted(vm.possibleLayers, layer);
+    vm.layers.splice(vm.layers.indexOf(layer), 1);
+  }
+  function addLayer() {
+    var layer = vm.currentAddLayer;
+    delete vm.currentAddLayer;
+    vm.layers.push(layer); // add as top layer
+    vm.possibleLayers.splice(vm.possibleLayers.indexOf(layer), 1);
+  }
 }
+
+function insertSorted(array, elem) {
+  // Uses insert sort
+  array.push(elem);
+  sort(array);
+}
+
+function sort(array) {
+  for (var i = 1; i < array.length; i++) {
+    var x = array[i];
+    var j = i;
+    while (j > 0 && array[j-1].name > x.name) {
+      array[j] = array[j-1];
+      j = j - 1;
+    }
+    array[j] = x;
+  }
+}
+
 //
 //   var map;
 //   var tiled;

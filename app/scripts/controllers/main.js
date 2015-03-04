@@ -16,10 +16,10 @@ MainController.$inject = ['SimCityWebService', 'MessageBus'];
 function MainController(SimCityWebService, MessageBus) {
   var vm = this;
   vm.startJob = startJob;
-  
+
   updateStatus('none');
 
-  MessageBus.subscribe('job.submitted', function(data) {
+  MessageBus.subscribe('job.submitted', function(event, data) {
     updateStatus('success', 'Started job ' + data.batch_id);
   });
   MessageBus.subscribe('job.maxed', function() {

@@ -51,7 +51,7 @@
       <h1 class="navbar-brand">SIM-CITY Web</h1>
     </div>
 
-    <div class="infrastructure-panel panel panel-default pull-right">
+    <div class="infrastructure-panel panel panel-default pull-right" style="float: right; position: absolute; z-index: 9000">
       <div class="panel-heading">
         <a class="btn" type="button" data-toggle="collapse" href=".infrastructureoverview" aria-expanded="false" aira-controls=".infrastructureoverview"><span class="glyphicon glyphicon-tasks"></span></a>
         <h3 class="panel-title infrastructure-title"><span class="infrastructureoverview collapse in">Infrastructure</span></h3>
@@ -63,8 +63,8 @@
       </div>
     </div>
 
-    <div class="container">
-      <div ng-include="'views/map.html'" ng-controller="MapCtrl"></div>
+    <div class="container-fluid">
+      <div ng-include="'views/map.html'" ng-controller="MapCtrl as vm"></div>
     </div>
     <div class="container">
       <div ng-include="'views/parameters.html'" ng-controller="ParameterListCtrl"></div>

@@ -16,7 +16,7 @@ describe('Controller: MainCtrl', function () {
     });
   }));
 
-  it('should attach a list of irieSomething to the scope', function () {
-    expect(scope.startJob).toBeDefined();
+  it('should attach a list of startJob to the scope', function () {
+    expect(MainCtrl.startJob).toBeDefined();
   });
 });

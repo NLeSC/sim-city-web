@@ -30,10 +30,9 @@ FILE="dist.$NOW.tar.bz2"
 STAGING=/srv/staging/app/$NAME
 RELEASE=/srv/https/app/$RELEASENAME
 
-rm dist/dist*.tar.bz2
 confirm "Upload to $STAGING and release to $RELEASE?" &&
-echo "==== RUNNING GRUNT ====" && grunt && cd dist &&
-echo "==== COMPRESSING   ====" && tar cjf $FILE * &&
+echo "==== RUNNING GRUNT ====" && grunt clean && grunt && cd dist &&
+echo "==== COMPRESSING   ====" && tar cjf $FILE * .[^.]* &&
 echo "==== COPYING FILE  ====" && ssh sim-city "mkdir $STAGING" && scp $FILE sim-city:$STAGING &&
 echo "==== RELEASING     ====" && ssh sim-city "cd $STAGING && tar xjf $FILE && rm $FILE && ln -s $STAGING ../$RELEASENAME && mv -T ../$RELEASENAME $RELEASE" &&
 rm $FILE

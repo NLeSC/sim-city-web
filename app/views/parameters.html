@@ -1,26 +1,26 @@
-<form class="form-horizontal" ng-show="parameters">
+<form class="form-horizontal" ng-show="vm.parameters">
   <fieldset>
     <legend>Simulation parameters</legend>
-    <div ng-repeat="param in parameters track by name">
+    <div ng-repeat="param in vm.parameters track by name">
       <div class="form-group">
-        <label class="control-label col-sm-2" for="param-{{param.name}}" ng-bind="param.name"></label>
+        <label class="control-label col-sm-2" for="param-{{param.name}}" ng-bind="param.title || param.name"></label>
         <div class="col-sm-10">
           <!-- Interval -->
           <div ng-show="param.type == 'interval'" ng-switch="param.dtype">
-            <input ng-switch-when="str" type="text" ng-model="input[param.name]" id="param-{{param.name}}" name="{{param.name}}" placeholder="{{param.default}}" class="form-control">
-            <input ng-switch-default type="number" min="{{param.min}}" max="{{param.max}}" ng-model="input[param.name]" id="param-{{param.name}}" name="{{param.name}}" placeholder="{{param.default}}" class="form-control">
+            <input ng-switch-when="str" type="text" ng-model="vm.input[param.name]" id="param-{{param.name}}" name="{{param.name}}" class="form-control">
+            <input ng-switch-default type="number" min="{{param.min}}" max="{{param.max}}" ng-model="vm.input[param.name]" id="param-{{param.name}}" class="form-control">
           </div>
           <!-- Choice -->
-          <select ng-show="param.type == 'choice'" ng-options="choice for choice in param.choices" ng-model="input[param.name]" id="param-{{param.name}}" name="{{param.name}}" class="form-control"></select>
+          <select ng-show="param.type == 'choice'" ng-options="choice for choice in param.choices" ng-model="vm.input[param.name]" id="param-{{param.name}}" class="form-control"></select>
           <p class="help-block" ng-bind="param.description"></p>
         </div>
       </div>
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="submit btn btn-primary" ng-click="startSimulation()">
+        <button type="submit" class="submit btn btn-primary" ng-click="vm.startSimulation()">
           Start simulation
-          <span ng-switch="submitstatus">
+          <span ng-switch="vm.submitstatus">
             <span class="glyphicon glyphicon-ok" ng-switch-when="success"></span>
             <img src="images/ajax-loader.gif" ng-switch-when="loading" ng-cloak>
           </span>

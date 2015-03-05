@@ -3,39 +3,48 @@
 'use strict';
 
 angular.module('simCityWebApp')
-.controller('ParameterListCtrl', ['$scope', '$http', 'MessageBus', 'SimCityWebService', function ($scope, $http, MessageBus, SimCityWebService) {
+.controller('ParameterListCtrl', ParameterListController);
+
+
+ParameterListController.$inject = ['$http', 'MessageBus', 'SimCityWebService'];
+
+function ParameterListController($http, MessageBus, SimCityWebService) {
+  var vm = this;
   MessageBus.subscribe('task.failed', function(event, msg) {
-    $scope.errorMsg = msg.formatted;
-    $scope.submitstatus = 'error';
+    vm.errorMsg = msg.formatted;
+    vm.submitstatus = 'error';
   });
 
-  angular.extend($scope, {
-    startSimulation: function() {
-      $scope.submitstatus = 'loading';
-      delete $scope.errorMsg;
+  vm.log = function() { console.log(vm.input); };
+  vm.startSimulation = startSimulation;
+  vm.input = {};
 
-      SimCityWebService.submitTask('matsim', $scope.input).
+  function startSimulation() {
+      vm.submitstatus = 'loading';
+      delete vm.errorMsg;
+      
+      SimCityWebService.submitTask('matsim', vm.input).
         success(function() {
-          $scope.submitstatus = 'success';
+          vm.submitstatus = 'success';
         });
-    },
-    input: {},
-  });
+  }
 
   $http.get('/explore/simulate/matsim/latest').
   success(function(data) {
-    var input = {};
     for (var i = 0; i < data.parameters.length; i++) {
+      var key = data.parameters[i].name;
       if (data.parameters[i].default) {
-        input[data.parameters[i].name] = data.parameters[i].default;
+        if (data.parameters[i].dtype === 'int') {
+          vm.input[key] = parseInt(data.parameters[i].default, 10);
+        } else if (data.parameters[i].dtype === 'float') {
+          vm.input[key] = parseFloat(data.parameters[i].default);
+        } else {
+          vm.input[key] = data.parameters[i].default;
+        }
       }
     }
-    angular.extend($scope, {
-      parameters: data.parameters,
-      input: input
-    });
+    vm.parameters = data.parameters;
   });
-
-}]);
+}
 
 })();

@@ -1,21 +1,4 @@
-<openlayers ol-center="vm.bangalore" ol-defaults="vm.defaults" custom-layers="true">
-      <!-- <ol-layer ol-layer-properties="bing"></ol-layer> -->
-    <ol-layer ol-layer-properties="layer" ng-repeat="(name, layer) in vm.layers"></ol-layer>
-    <!-- <ol-control name="{{ control.name }}" ng-repeat="control in controls|filter: {active: true}"></ol-control> -->
+<openlayers ol-center="vm.bangalore" ol-defaults="vm.defaults" custom-layers="false">
+    <!-- <ol-layer ol-layer-properties="vm.layerService.activeBaseLayer"></ol-layer> -->
+    <ol-layer ol-layer-properties="layer" ng-repeat="layer in vm.showLayers track by layer.name"></ol-layer>
 </openlayers>
-<div class="container">
-<fieldset class="form-horizontal layer-controls">
-<div class="form-group">
-  <div class="col-sm-offset-2 col-sm-8">
-    <select ng-options="layer.name for layer in vm.possibleLayers track by layer.name" ng-model="vm.currentAddLayer" class="form-control"></select>
-  </div>
-  <button class="col-sm-2 btn btn-primary" ng-click="vm.addLayer()">Add layer</button>
-</div>
-<div class="form-group">
-  <div class="col-sm-offset-2 col-sm-8">
-    <select ng-options="layer.name for layer in vm.layers track by layer.name" ng-model="vm.currentRmLayer" class="form-control"></select>
-  </div>
-  <button class="col-sm-2 btn btn-primary" ng-click="vm.removeLayer()">Remove layer</button>
-</div>
-</fieldset>
-</div>

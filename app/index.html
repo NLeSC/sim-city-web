@@ -51,15 +51,24 @@
       <h1 class="navbar-brand">SIM-CITY Web</h1>
     </div>
 
-    <div class="infrastructure-panel panel panel-default pull-right">
-      <div class="panel-heading">
-        <a class="btn" type="button" data-toggle="collapse" href=".infrastructureoverview" aria-expanded="false" aira-controls=".infrastructureoverview"><span class="glyphicon glyphicon-tasks"></span></a>
-        <h3 class="panel-title infrastructure-title"><span class="infrastructureoverview collapse in">Infrastructure</span></h3>
+    <div id="overview-panel" class="panel-group pull-right" id="accordion" role="tablist">
+      <div id="infrastructure-panel" class="panel panel-default">
+        <div class="panel-heading" role="tab">
+          <h3 class="panel-title"><a data-parent="#accordion" data-toggle="collapse" href="#infrastructure-body"><span class="glyphicon glyphicon-tasks"></span> Infrastructure</a></h3>
+        </div>
+        <div id="infrastructure-body" class="collapse" role="tabpanel">
+          <div ng-include="'views/tasks.html'" ng-controller="TaskListCtrl"></div>
+          <div ng-include="'views/overview.html'" ng-controller="OverviewCtrl"></div>
+          <div ng-include="'views/main.html'" ng-controller="MainCtrl as vm"></div>
+        </div>
       </div>
-      <div class="infrastructureoverview infrastructure-body collapse in">
-        <div ng-include="'views/tasks.html'" ng-controller="TaskListCtrl"></div>
-        <div ng-include="'views/overview.html'" ng-controller="OverviewCtrl"></div>
-        <div ng-include="'views/main.html'" ng-controller="MainCtrl as vm"></div>
+      <div id="layers-panel" class="panel panel-default">
+        <div class="panel-heading" role="tab">
+          <h3 class="panel-title"><a data-parent="#accordion" data-toggle="collapse" href="#layers-body"><span class="glyphicon glyphicon-picture"></span> Layers</a></h3>
+        </div>
+        <div id="layers-body" class="collapse in">
+          <div ng-include="'views/layers.html'" ng-controller="LayerCtrl as vm"></div>
+        </div>
       </div>
     </div>
 
@@ -86,17 +95,20 @@
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-openlayers-directive/dist/angular-openlayers-directive.min.js"></script>
+    <script src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/services/messagebus.js"></script>
+        <script src="scripts/services/layers.js"></script>
         <script src="scripts/services/webservice.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/tasks.js"></script>
         <script src="scripts/controllers/parameters.js"></script>
         <script src="scripts/controllers/overview.js"></script>
         <script src="scripts/controllers/map.js"></script>
+        <script src="scripts/controllers/layers.js"></script>
         <!-- endbuild -->
 </body>
 </html>

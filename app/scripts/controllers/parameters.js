@@ -15,16 +15,15 @@ function ParameterListController($http, MessageBus, SimCityWebService) {
     vm.submitstatus = 'error';
   });
 
-  vm.log = function() { console.log(vm.input); };
   vm.startSimulation = startSimulation;
   vm.input = {};
 
   function startSimulation() {
       vm.submitstatus = 'loading';
       delete vm.errorMsg;
-      
-      SimCityWebService.submitTask('matsim', vm.input).
-        success(function() {
+
+      SimCityWebService.submitTask('matsim', vm.input)
+        .success(function() {
           vm.submitstatus = 'success';
         });
   }

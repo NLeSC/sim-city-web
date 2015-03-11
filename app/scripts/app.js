@@ -16,6 +16,7 @@ angular.
     'ngCookies',
     'ngResource',
     'openlayers-directive',
+    'dndLists',
   ]);
 
 })();

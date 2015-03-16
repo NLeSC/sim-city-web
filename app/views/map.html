@@ -1,4 +1,4 @@
 <openlayers ol-center="vm.bangalore" ol-defaults="vm.defaults" custom-layers="false">
     <!-- <ol-layer ol-layer-properties="vm.layerService.activeBaseLayer"></ol-layer> -->
-    <ol-layer ol-layer-properties="layer" ng-repeat="layer in vm.showLayers track by layer.name"></ol-layer>
+    <ol-layer ol-layer-properties="layer" ng-repeat="layer in vm.layerService.showLayers track by layer.name"></ol-layer>
 </openlayers>

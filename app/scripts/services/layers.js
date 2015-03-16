@@ -4,8 +4,8 @@
 angular.module('simCityWebApp').
   service('LayerService', LayerService);
 
-LayerService.$inject = ['$http', 'MessageBus'];
-function LayerService($http, MessageBus) {
+LayerService.$inject = ['$http'];
+function LayerService($http) {
   var vm = this;
 
   vm.activeBaseLayer = undefined;
@@ -59,7 +59,7 @@ function LayerService($http, MessageBus) {
     vm.showLayers = [vm.activeBaseLayer]
       .concat(vm.activeLayers)
       .map(function(l, idx){l.index = idx; return l;});
-    MessageBus.publish('layers.updated');
+    console.log(vm.showLayers.map(getName));
   }
 
   function activateLayer(layer) {

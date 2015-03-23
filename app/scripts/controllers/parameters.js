@@ -10,6 +10,9 @@ ParameterListController.$inject = ['$http', 'MessageBus', 'SimCityWebService'];
 
 function ParameterListController($http, MessageBus, SimCityWebService) {
   var vm = this;
+  var version = '0.3';
+  var simulation = 'matsim';
+
   MessageBus.subscribe('task.failed', function(event, msg) {
     vm.errorMsg = msg.formatted;
     vm.submitstatus = 'error';
@@ -21,14 +24,16 @@ function ParameterListController($http, MessageBus, SimCityWebService) {
   function startSimulation() {
       vm.submitstatus = 'loading';
       delete vm.errorMsg;
-
+      if (vm.input.name) {
+        vm.input._id = 'task_' + vm.input.name + '_' + simulation + '_' + version;
+      }
       SimCityWebService.submitTask('matsim', vm.input)
         .success(function() {
           vm.submitstatus = 'success';
         });
   }
 
-  $http.get('/explore/simulate/matsim/latest').
+  $http.get('/explore/simulate/' + simulation + '/' + version).
   success(function(data) {
     for (var i = 0; i < data.parameters.length; i++) {
       var key = data.parameters[i].name;

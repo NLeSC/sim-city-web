@@ -13,7 +13,7 @@ angular.module('simCityWebApp')
       * Loads and populates the notifications
       */
     this.loadOverview = function (){
-      $http.get('/explore/overview').
+      $http.get('/explore/view/totals').
       success(function(data) {
         angular.extend($scope, {
           tasks: [

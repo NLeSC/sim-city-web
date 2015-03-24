@@ -46,7 +46,7 @@ li.selected {
 
 .angular-openlayers-map {
   width: 100%;
-  height: 480px;
+  height: 100vh;
 }
 
 .layer-controls {
@@ -82,11 +82,11 @@ li.selected {
 }
 
 .startjob {
-  padding: 6px;
+  padding-bottom: 6px;
 }
 
 .btn-startjob {
-  margin-left: 39px;
+  margin-left: 100px;
 }
 
 .change {

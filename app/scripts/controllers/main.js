@@ -13,6 +13,7 @@ angular.module('simCityWebApp')
   .controller('MainCtrl', MainController);
 
 MainController.$inject = ['SimCityWebService', 'MessageBus'];
+
 function MainController(SimCityWebService, MessageBus) {
   var vm = this;
   vm.startJob = startJob;
@@ -20,7 +21,7 @@ function MainController(SimCityWebService, MessageBus) {
   updateStatus('none');
 
   MessageBus.subscribe('job.submitted', function(event, data) {
-    updateStatus('success', 'Started job ' + data.batch_id);
+    updateStatus('success', 'Started job: ' + data.batch_id);
   });
   MessageBus.subscribe('job.maxed', function() {
     updateStatus('ignored', 'Already enough jobs running');

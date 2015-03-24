@@ -12,6 +12,7 @@
 angular.module('simCityWebApp').controller('MapCtrl', MapController);
 
 MapController.$inject = ['$timeout', '$http', 'LayerService'];
+
 function MapController($timeout, $http, LayerService) {
   var vm = this;
 

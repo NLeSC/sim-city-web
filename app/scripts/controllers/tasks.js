@@ -9,11 +9,12 @@ TaskListController.$inject = ['MessageBus', 'LayerService', 'SimCityWebService',
 function TaskListController(MessageBus, LayerService, WebService, $interval) {
   var vm = this;
 
+  vm.modalRemove = modalRemove;
+  vm.remove = remove;
+  vm.status = 'Loading...';
   vm.tasks = [];
   vm.updateView = updateView;
   vm.visualize = visualize;
-  vm.remove = remove;
-  vm.modalRemove = modalRemove;
 
   updateView();
   MessageBus.subscribe('task.submitted', updateView);
@@ -67,8 +68,20 @@ function TaskListController(MessageBus, LayerService, WebService, $interval) {
     WebService.viewTasks('matsim', '0.3')
       .success(function(data) {
         vm.tasks = data.rows.map(function(el) { return el.value; });
+        if (vm.status) {
+          delete vm.status;
+        }
       })
-      .error(function(data, status) { console.log('cannot find simulations ' + status + '; ' + data); });
+      .error(function(data, status) {
+        if (vm.status) {
+          if (status === 0) {
+            status = '';
+          } else {
+            status = '(code ' + status + ')';
+          }
+          vm.status = 'Cannot load infrastructure overview ' + status;
+        }
+      });
   }
 
   function modalRemove(task) {

@@ -25,19 +25,19 @@ function TaskListController(MessageBus, LayerService, WebService, $interval) {
     0: [new ol.style.Style({
           stroke: new ol.style.Stroke({
             color: 'yellow',
-            width: 1,
+            width: 3,
           })
         })],
     12: [new ol.style.Style({
           stroke: new ol.style.Stroke({
             color: 'orange',
-            width: 1,
+            width: 3,
           })
         })],
     25: [new ol.style.Style({
           stroke: new ol.style.Stroke({
             color: 'red',
-            width: 2,
+            width: 4,
           })
         })],
   };

@@ -3,55 +3,60 @@
 'use strict';
 
 angular.module('simCityWebApp')
-  .controller('OverviewCtrl', ['$scope', '$http', '$interval', 'MessageBus', function ($scope, $http, $interval, MessageBus) {
-    angular.extend($scope, {
-      jobs: [{name: 'Loading...', value: ''}],
-      tasks: [{name: 'Loading...', value: ''}]
-    });
+  .controller('OverviewCtrl', OverviewController);
 
-    /**
-      * Loads and populates the notifications
-      */
-    this.loadOverview = function (){
-      $http.get('/explore/view/totals').
-      success(function(data) {
-        angular.extend($scope, {
-          tasks: [
+OverviewController.$inject = ['$http', '$interval', 'MessageBus'];
+function OverviewController($http, $interval, MessageBus) {
+  var vm = this;
+
+  vm.jobs = [];
+  vm.loadOverview = loadOverview;
+  vm.tasks = [];
+
+  vm.status = 'Loading...';
+
+  MessageBus.subscribe('task.submitted', vm.loadOverview);
+  MessageBus.subscribe('job.submitted', vm.loadOverview);
+
+  //Put in interval, first trigger after 10 seconds
+  $interval(vm.loadOverview, 10000);
+  //invoke initialy
+  vm.loadOverview();
+
+  /**
+    * Loads and populates the notifications
+    */
+  function loadOverview(){
+    $http.get('/explore/view/totals')
+      .success(function(data) {
+        vm.tasks = [
             {name: 'queued', value: data.todo},
             {name: 'processing', value: data.locked},
             {name: 'done', value: data.done},
             {name: 'with error', value: data.error}
-          ],
-          jobs: [
+          ];
+        vm.jobs = [
             {name: 'active',    value: data.active_jobs},
             {name: 'pending',   value: data.pending_jobs},
             {name: 'finished',  value: data.finished_jobs}
-          ]
-        });
-      }).
-      error(function(data, status) {
-        if (status === 0) {
-          status = '';
-        } else {
-          status = '(' + status + ')';
+          ];
+        if (vm.status) {
+          delete vm.status;
         }
-        angular.extend($scope, {
-          jobs: [{name: 'Error loading', value: status}],
-          tasks: [{name: 'Error loading', value: status}]
-        });
+      })
+      .error(function(data, status) {
+        if (vm.status) {
+          if (status === 0) {
+            status = '';
+          } else {
+            status = '(code ' + status + ')';
+          }
+          vm.status = 'Cannot load infrastructure overview ' + status;
+        }
       });
-    };
-    //Put in interval, first trigger after 10 seconds
-    $interval(function(){
-       this.loadOverview();
-    }.bind(this), 10000);
+  }
+}
 
-    MessageBus.subscribe('task.submitted', this.loadOverview);
-    MessageBus.subscribe('job.submitted', this.loadOverview);
-
-    //invoke initialy
-    this.loadOverview();
-}]);
 // .
 // directive('animateOnChange', ['$animate', function($animate) {
 //   return function(scope, elem, attr) {

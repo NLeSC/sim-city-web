@@ -57,7 +57,7 @@
           <h3 class="panel-title"><a data-parent="#accordion" data-toggle="collapse" href="#infrastructure-body"><span class="glyphicon glyphicon-dashboard"></span> Infrastructure</a></h3>
         </div>
         <div id="infrastructure-body" class="collapse" role="tabpanel">
-          <div ng-include="'views/overview.html'" ng-controller="OverviewCtrl"></div>
+          <div ng-include="'views/overview.html'" ng-controller="OverviewCtrl as vm"></div>
           <div ng-include="'views/main.html'" ng-controller="MainCtrl as vm"></div>
         </div>
       </div>

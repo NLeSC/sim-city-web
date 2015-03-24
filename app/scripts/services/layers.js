@@ -22,10 +22,27 @@ function LayerService($http) {
   vm.selectBaseLayer = selectBaseLayer;
 
   vm.addBaseLayer({
+    name: 'toner',
+    title: 'Toner B&W',
+    source: {
+      type: 'Stamen',
+      layer: 'toner',
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
+    },
+  });
+  vm.addBaseLayer({
+    name: 'watercolor',
+    title: 'Watercolor',
+    source: {
+      type: 'Stamen',
+      layer: 'watercolor',
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
+    },
+  });
+  vm.addBaseLayer({
     name: 'bingsat',
     title: 'Satellite',
     source: {
-        name: 'Bing Maps',
         type: 'BingMaps',
         key: 'Au9Lj6rpm-ZvnbpxgpTIVTD7cBP_nIGVKA8boyR0Ai8YRrPT8WyELLZnAcq5V40N',
         imagerySet: 'Aerial'
@@ -35,11 +52,10 @@ function LayerService($http) {
     name: 'bingroad',
     title: 'Roads',
     source: {
-        name: 'Bing Maps',
         type: 'BingMaps',
         key: 'Au9Lj6rpm-ZvnbpxgpTIVTD7cBP_nIGVKA8boyR0Ai8YRrPT8WyELLZnAcq5V40N',
         imagerySet: 'Road',
-      },
+    },
   });
   vm.addBaseLayer({
     name: 'osm',

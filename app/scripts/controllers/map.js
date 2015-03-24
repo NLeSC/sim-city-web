@@ -27,7 +27,7 @@ function MapController($timeout, $http, LayerService) {
       },
       controls: {
         zoom: true,
-        attribution: false,
+        attribution: true,
       },
       view: {
         maxZoom: 18,
@@ -51,7 +51,6 @@ function MapController($timeout, $http, LayerService) {
     },
   };
   LayerService.addLayer(blr_roads);
-  LayerService.activateLayer(blr_roads);
   LayerService.addTileWMSLayers('/geoserver/Bangalore/wms');
 }
 

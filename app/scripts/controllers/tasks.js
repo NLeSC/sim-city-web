@@ -93,8 +93,12 @@ function TaskListController(MessageBus, LayerService, WebService, $interval) {
   function remove() {
     WebService.deleteTask(vm.toRemove.id, vm.toRemove.rev)
       .success(function() {
-        updateView();
-        $('#removeSimulationModal').modal('hide');
+        updateView()
+          .then(function() {
+            $('#removeSimulationModal').modal('hide');
+          }, function() {
+            $('#removeSimulationModal').modal('hide');
+          });
       })
       .error(function (data, status) {
         if (status === 409) {

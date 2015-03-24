@@ -14,6 +14,7 @@ function TaskListController(MessageBus, LayerService, WebService, $interval) {
   vm.status = 'Loading...';
   vm.tasks = [];
   vm.updateView = updateView;
+  vm.viewTask = viewTask;
   vm.visualize = visualize;
 
   updateView();
@@ -62,6 +63,10 @@ function TaskListController(MessageBus, LayerService, WebService, $interval) {
     };
     LayerService.addLayer(layer);
     LayerService.activateLayer(layer);
+  }
+
+  function viewTask(task) {
+    MessageBus.publish('task.selected', task);
   }
 
   function updateView() {

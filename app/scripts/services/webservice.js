@@ -10,6 +10,7 @@ function SimCityWebService($http, MessageBus) {
   var vm = this;
 
   vm.deleteTask = deleteTask;
+  vm.getTask = getTask;
   vm.submitJob = submitJob;
   vm.submitTask = submitTask;
   vm.viewTasks = viewTasks;
@@ -42,6 +43,10 @@ function SimCityWebService($http, MessageBus) {
 
   function viewTasks(simulation, version) {
     return $http.get('/explore/view/simulations/' + simulation + '/' + version);
+  }
+
+  function getTask(id) {
+    return $http.get('/explore/simulation/' + id);
   }
 
   function deleteTask(id, rev) {

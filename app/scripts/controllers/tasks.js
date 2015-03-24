@@ -72,7 +72,7 @@ function TaskListController(MessageBus, LayerService, WebService, $interval) {
   }
 
   function modalRemove(task) {
-    $('#removeSimulationModal').appendTo("body");
+    $('#removeSimulationModal').appendTo('body');
     vm.toRemove = task;
     delete vm.removeError;
   }

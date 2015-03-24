@@ -52,46 +52,6 @@ function MapController($timeout, $http, LayerService) {
   LayerService.addLayer(blr_roads);
   LayerService.activateLayer(blr_roads);
   LayerService.addTileWMSLayers('/geoserver/Bangalore/wms');
-
-  var styleByVolume = {
-    0: [new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'yellow',
-            width: 1,
-          })
-        })],
-    12: [new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'orange',
-            width: 1,
-          })
-        })],
-    25: [new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'red',
-            width: 2,
-          })
-        })],
-  };
-  // reverse sort
-  var sortedStyleByVolumeKeys = Object.keys(styleByVolume).sort(function(a,b){return b-a;});
-
-  LayerService.addLayer({
-        name: 'volume',
-        title: 'Link volume 8 AM',
-        source: {
-          type: 'GeoJSON',
-          url: '/output/blr/GeoLinkVolume.8.json',
-        },
-        style: function(feature) {
-          var volume = feature.getProperties().volume;
-          for (var i = 0; i < sortedStyleByVolumeKeys.length; i++) {
-            if (volume >= sortedStyleByVolumeKeys[i]) {
-              return styleByVolume[sortedStyleByVolumeKeys[i]];
-            }
-          }
-        },
-      });
 }
 
 })();

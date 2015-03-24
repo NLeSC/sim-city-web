@@ -13,7 +13,7 @@ angular.module('simCityWebApp')
       * Loads and populates the notifications
       */
     this.loadOverview = function (){
-      $http.get('/explore/overview').
+      $http.get('/explore/view/totals').
       success(function(data) {
         angular.extend($scope, {
           tasks: [
@@ -51,17 +51,18 @@ angular.module('simCityWebApp')
 
     //invoke initialy
     this.loadOverview();
-}]).
-directive('animateOnChange', ['$animate', function($animate) {
-  return function(scope, elem, attr) {
-      scope.$watch(attr.animateOnChange, function(newValue, oldValue) {
-        if (newValue !== oldValue) {
-          $animate.addClass(elem, 'change', function() {
-            $animate.removeClass(elem, 'change');
-          });
-        }
-      });
-    };
 }]);
+// .
+// directive('animateOnChange', ['$animate', function($animate) {
+//   return function(scope, elem, attr) {
+//       scope.$watch(attr.animateOnChange, function(newValue, oldValue) {
+//         if (newValue !== oldValue) {
+//           $animate.addClass(elem, 'change', function() {
+//             $animate.removeClass(elem, 'change');
+//           });
+//         }
+//       });
+//     };
+// }]);
 
 })();

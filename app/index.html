@@ -54,10 +54,9 @@
     <div id="overview-panel" class="panel-group pull-right" id="accordion" role="tablist">
       <div id="infrastructure-panel" class="panel panel-default">
         <div class="panel-heading" role="tab">
-          <h3 class="panel-title"><a data-parent="#accordion" data-toggle="collapse" href="#infrastructure-body"><span class="glyphicon glyphicon-tasks"></span> Infrastructure</a></h3>
+          <h3 class="panel-title"><a data-parent="#accordion" data-toggle="collapse" href="#infrastructure-body"><span class="glyphicon glyphicon-dashboard"></span> Infrastructure</a></h3>
         </div>
         <div id="infrastructure-body" class="collapse" role="tabpanel">
-          <div ng-include="'views/tasks.html'" ng-controller="TaskListCtrl"></div>
           <div ng-include="'views/overview.html'" ng-controller="OverviewCtrl"></div>
           <div ng-include="'views/main.html'" ng-controller="MainCtrl as vm"></div>
         </div>
@@ -72,11 +71,24 @@
       </div>
     </div>
 
+    <div id="simulation-panel" class="panel-group pull-left">
+      <div id="task-panel" class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">New simulation</h3>
+        </div>
+        <div ng-include="'views/tasks.html'" ng-controller="TaskListCtrl as vm"></div>
+      </div>
+      <div id="newtask-panel" class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">New task</h3>
+        </div>
+        <div ng-include="'views/parameters.html'" ng-controller="ParameterListCtrl as vm"></div>
+      </div>
+    </div>
+
+
     <div class="container-fluid container-map">
       <div ng-include="'views/map.html'" ng-controller="MapCtrl as vm"></div>
-    </div>
-    <div class="container">
-      <div ng-include="'views/parameters.html'" ng-controller="ParameterListCtrl as vm"></div>
     </div>
 
     <div class="footer">
@@ -90,7 +102,6 @@
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>

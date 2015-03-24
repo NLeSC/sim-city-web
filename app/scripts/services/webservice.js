@@ -7,8 +7,12 @@ angular.module('simCityWebApp').
 
 SimCityWebService.$inject = ['$http', 'MessageBus'];
 function SimCityWebService($http, MessageBus) {
-  this.submitJob = submitJob;
-  this.submitTask = submitTask;
+  var vm = this;
+
+  vm.deleteTask = deleteTask;
+  vm.submitJob = submitJob;
+  vm.submitTask = submitTask;
+  vm.viewTasks = viewTasks;
 
   function submitJob(host) {
     return $http.post(host ? '/explore/job/' + host : '/explore/job').
@@ -25,19 +29,31 @@ function SimCityWebService($http, MessageBus) {
   }
 
   function submitTask(model, params) {
+    return _http('POST', '/explore/simulate/' + model, params)
+      .success(function(data, status, headers) {
+        var task = {url: headers('Location')};
+        task.name = task.url.substr(task.url.lastIndexOf('/') + 1);
+        MessageBus.publish('task.submitted', task);
+      })
+      .error(function(data, status, headers, config, statusText) {
+        MessageBus.publish('task.failed', formatHTTPError(data, status, statusText, 'error starting simulation'));
+      });
+  }
+
+  function viewTasks(simulation, version) {
+    return $http.get('/explore/view/simulations/' + simulation + '/' + version);
+  }
+
+  function deleteTask(id, rev) {
+    return _http('DELETE', '/explore/simulation/' + id, {rev: rev});
+  }
+
+  function _http(method, url, params) {
     return $http({
-      method: 'POST',
-      url: '/explore/simulate/' + model,
+      method: method,
+      url: url,
       params: params,
       headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
-    }).
-    success(function(data, status, headers) {
-      var task = {url: headers('Location')};
-      task.name = task.url.substr(task.url.lastIndexOf('/') + 1);
-      MessageBus.publish('task.submitted', task);
-    }).
-    error(function(data, status, headers, config, statusText) {
-      MessageBus.publish('task.failed', formatHTTPError(data, status, statusText, 'error starting simulation'));
     });
   }
 }

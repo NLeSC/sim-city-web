@@ -16,7 +16,7 @@
       <td><a href="{{task.url}}" target="_blank" title="get raw data"><span class="glyphicon glyphicon-save-file"></span></a></td></td>
       <td ng-bind="task.input['name']"></td>
       <td ng-bind="task.input['commute-percentage']"></td>
-      <td><a href="#" ng-click="vm.remove(task)" class="text-normal" title="remove simulation"><span class="glyphicon glyphicon-remove-circle"></span></a></td>
+      <td><a href="#" ng-click="vm.modalRemove(task)" class="text-normal" title="remove simulation" data-target="#removeSimulationModal" data-toggle="modal"><span class="glyphicon glyphicon-remove-circle"></span></a></td>
     </tr>
   </table>
   <div class="list-group">
@@ -24,23 +24,21 @@
   </div>
 </div>
 
-<script type="text/ng-template" id="removeSimulationModal.html">
-<div id="removeSimulationModal" class="modal fade">
+<div id="removeSimulationModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button class="close" ng-click="cancel()">&times;</button>
+        <button class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Remove simulation</h4>
       </div>
       <div class="modal-body">
-        <p ng-bind-template="Are you sure you want to remove simulation {{toRemove.input.name}} (with: id {{toRemove.id}; commute percentage {{toRemove.input.commute-percentage}})?"></p>
-        <p ng-show="removeError" ng-bind="removeError" class="text-danger"></p>
+        <p ng-bind-template="Are you sure you want to remove simulation '{{vm.toRemove.input.name}}' (with id '{{vm.toRemove.id}}' and commute percentage {{vm.toRemove.input.commute-percentage}})?"></p>
+        <p ng-show="vm.removeError" ng-bind="vm.removeError" class="text-danger"></p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
-        <button class="btn btn-danger" ng-click="remove()">Remove simulation</button>
+        <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" ng-click="vm.remove()">Remove simulation</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-</script>

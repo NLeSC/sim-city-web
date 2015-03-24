@@ -2,17 +2,18 @@
   'use strict';
 
 angular.module('simCityWebApp')
-  .controller('TaskListCtrl', TaskListController)
-  .controller('RemoveTaskModalInstanceCtrl', RemoveTaskModalInstanceController);
+  .controller('TaskListCtrl', TaskListController);
+  // .controller('RemoveTaskModalInstanceCtrl', RemoveTaskModalInstanceController);
 
-TaskListController.$inject = ['MessageBus', 'LayerService', 'SimCityWebService', '$modal', '$interval'];
-function TaskListController(MessageBus, LayerService, WebService, $modal, $interval) {
+TaskListController.$inject = ['MessageBus', 'LayerService', 'SimCityWebService', '$interval'];
+function TaskListController(MessageBus, LayerService, WebService, $interval) {
   var vm = this;
 
   vm.tasks = [];
   vm.updateView = updateView;
   vm.visualize = visualize;
-  vm.remove = modalRemove;
+  vm.remove = remove;
+  vm.modalRemove = modalRemove;
 
   updateView();
   MessageBus.subscribe('task.submitted', updateView);
@@ -71,35 +72,47 @@ function TaskListController(MessageBus, LayerService, WebService, $modal, $inter
   }
 
   function modalRemove(task) {
-    $modal.open({
-      templateUrl: 'removeSimulationModal.html',
-      controller: 'RemoveTaskModalInstanceCtrl',
-      resolve: {
-        toRemove: function() {
-          return task;
-        },
-      },
-    }).result.then(updateView);
+    $('#removeSimulationModal').appendTo("body");
+    vm.toRemove = task;
+    delete vm.removeError;
+  }
+
+  function remove() {
+    WebService.deleteTask(vm.toRemove.id, vm.toRemove.rev)
+      .success(function() {
+        updateView();
+        $('#removeSimulationModal').modal('hide');
+      })
+      .error(function (data, status) {
+        if (status === 409) {
+          vm.removeError = 'cannot remove simulation: it was modified';
+        } else if (data) {
+          vm.removeError = 'cannot remove simulation: ' + data;
+        } else {
+          vm.removeError = 'cannot remove simulation';
+        }
+      });
   }
 }
 
-RemoveTaskModalInstanceController.$inject = ['$scope', '$modalInstance', 'SimCityWebService', 'toRemove'];
-function RemoveTaskModalInstanceController($scope, $modalInstance, WebService, toRemove) {
-  $scope.cancel = $modalInstance.dismiss;
-  $scope.remove = function () {
-    WebService.deleteTask(toRemove.id, toRemove.rev)
-      .success($modalInstance.close)
-      .error(function (data, status) {
-        if (status === 409) {
-          $scope.removeError = 'cannot remove simulation: it was modified';
-        } else if (data) {
-          $scope.removeError = 'cannot remove simulation: ' + data;
-        } else {
-          $scope.removeError = 'cannot remove simulation';
-        }
-      });
-  };
-  $scope.toRemove = toRemove;
-}
+// RemoveTaskModalInstanceController.$inject = ['$scope', '$modalInstance', 'SimCityWebService', 'toRemove'];
+// function RemoveTaskModalInstanceController($scope, $modalInstance, WebService, toRemove) {
+//   console.log('arrived');
+//   $scope.cancel = $modalInstance.dismiss;
+//   $scope.remove = function () {
+//     WebService.deleteTask(toRemove.id, toRemove.rev)
+//       .success($modalInstance.close)
+//       .error(function (data, status) {
+//         if (status === 409) {
+//           $scope.removeError = 'cannot remove simulation: it was modified';
+//         } else if (data) {
+//           $scope.removeError = 'cannot remove simulation: ' + data;
+//         } else {
+//           $scope.removeError = 'cannot remove simulation';
+//         }
+//       });
+//   };
+//   $scope.toRemove = toRemove;
+// }
 
 })();

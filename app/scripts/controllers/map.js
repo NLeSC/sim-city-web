@@ -34,24 +34,22 @@ function MapController($scope, $timeout, $http, LayerService) {
         minZoom: 4,
         projection: 'EPSG:3857',
       },
-      events: {
-        layers: ['mousemove'],
-      },
+      // events: {
+      //   layers: ['mousemove'],
+      // },
     };
   vm.layerService = LayerService;
   vm.showLayers = [];
-  
-  $scope.$on('openlayers.layers.task_full_matsim_0.3_volume.mousemove', function(event, feature) {
-    if (!feature) {
-      return;
-    }
-    $scope.$apply(function() {
-      vm.volume = feature.getProperties().volume;
-    });
-  });
 
-
-
+  // $scope.$on('openlayers.layers.task_full_matsim_0.3_volume.mousemove', function(event, feature) {
+  //   if (!feature) {
+  //     return;
+  //   }
+  //   $scope.$apply(function() {
+  //     vm.volume = feature.getProperties().volume;
+  //   });
+  // });
+  //
   var blr_roads = {
     name: 'blr_roads',
     title: 'Bangalore road network',
@@ -64,8 +62,8 @@ function MapController($scope, $timeout, $http, LayerService) {
       },
     },
   };
-  LayerService.addLayer(blr_roads);
-  LayerService.addTileWMSLayers('/geoserver/Bangalore/wms');
+  LayerService.addImageLayer(blr_roads);
+  LayerService.addLayersFromOWS('/geoserver/Bangalore/ows');
 }
 
 })();

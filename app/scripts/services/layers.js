@@ -12,8 +12,9 @@ function LayerService($http) {
   vm.activeLayers = [];
   vm.activateLayer = activateLayer;
   vm.addBaseLayer = addBaseLayer;
-  vm.addLayer = addLayer;
-  vm.addTileWMSLayers = addTileWMSLayers;
+  vm.addImageLayer = addImageLayer;
+  vm.addVectorLayer = addVectorLayer;
+  vm.addLayersFromOWS = addLayersFromOWS;
   vm.baseLayers = [];
   vm.inactiveLayers = [];
   vm.showLayers = [];
@@ -75,7 +76,6 @@ function LayerService($http) {
     vm.showLayers = [vm.activeBaseLayer]
       .concat(vm.activeLayers)
       .map(function(l, idx){l.index = idx; return l;});
-    console.log(vm.showLayers.map(getName));
   }
 
   function activateLayer(layer) {
@@ -84,6 +84,8 @@ function LayerService($http) {
     updateLayers();
   }
   function addBaseLayer(layer) {
+    layer.id = layer.name;
+    layer.source.name = layer.id;
     if (!vm.activeBaseLayer) {
       vm.selectBaseLayer(layer);
     }
@@ -91,7 +93,7 @@ function LayerService($http) {
   }
 
   function indexOf(layer, layerList) {
-    return layerList.map(getName).indexOf(layer.name);
+    return layerList.map(getId).indexOf(layer.id);
   }
 
   function remove(layer, layerList) {
@@ -116,38 +118,59 @@ function LayerService($http) {
     }
   }
 
-  function addLayer(layer) {
-    if (vm.activeLayers.map(getName).indexOf(layer.name) === -1 &&
-        vm.inactiveLayers.map(getName).indexOf(layer.name) === -1) {
+  function addLayer(layer, type) {
+    layer.id = layer.name + '_' + type;
+    layer.contentType = type;
+    layer.source.name = layer.id;
+    if (vm.activeLayers.map(getId).indexOf(layer.id) === -1 &&
+        vm.inactiveLayers.map(getId).indexOf(layer.id) === -1) {
       insertSorted(layer, vm.inactiveLayers);
     }
+    return layer;
   }
 
-  function addTileWMSLayers(url) {
+  function addImageLayer(layer) {
+    return addLayer(layer, 'Image');
+  }
+
+  function addVectorLayer(layer) {
+    return addLayer(layer, 'Vector');
+  }
+
+  function addLayersFromOWS(url) {
     var parser = new ol.format.WMSCapabilities();
-    $http.get(url + '?request=getCapabilities')
+    $http.get(url + '?service=wms&request=getCapabilities')
       .success(function(data) {
         var result = parser.read(data);
-        // Copy original array
         var layers = result.Capability.Layer.Layer;
+
+        // Copy original array
         for (var i = 0; i < layers.length; i++) {
+          vm.addImageLayer({
+            name: layers[i].Name,
+            title: layers[i].Title || layers[i].Name,
+            source: {
+              type: 'TileWMS',
+              url: url + 'wms',
+              params: {
+                'LAYERS': layers[i].Name,
+                'TILED': true,
+              },
+            },
+          });
           if (layers[i].queryable === true) {
-            vm.addLayer({
+            vm.addVectorLayer({
               name: layers[i].Name,
               title: layers[i].Title || layers[i].Name,
               source: {
-                type: 'TileWMS',
-                url: url,
-                params: {
-                  'LAYERS': layers[i].Name,
-                  'TILED': true,
-                },
+                type: 'GeoJSON',
+                url: url + '?service=wfs&request=getFeature&outputFormat=application/json&typeName=' + layers[i].Name,
               },
             });
           }
         }
       });
-  }
+    }
 
   function selectBaseLayer(layer) {
     // unfortunately, directly selecting does not trigger an update.
@@ -162,8 +185,8 @@ function insertSorted(elem, array) {
   sort(array);
 }
 
-function getName(o) {
-  return o.name;
+function getId(o) {
+  return o.id;
 }
 
 function sort(array) {

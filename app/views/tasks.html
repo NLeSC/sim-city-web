@@ -35,7 +35,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button class="btn btn-danger" ng-click="vm.remove()">Remove simulation</button>
+        <button class="btn btn-danger" ng-disabled="vm.removeError" ng-click="vm.remove()">Remove simulation</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

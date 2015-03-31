@@ -69,7 +69,7 @@ function TaskListController(MessageBus, LayerService, WebService, $interval) {
   }
 
   function updateView() {
-    WebService.viewTasks('matsim', '0.3')
+    return WebService.viewTasks('matsim', '0.3')
       .success(function(data) {
         vm.tasks = data.rows.map(function(el) { return el.value; });
         if (vm.status) {

@@ -151,8 +151,9 @@ function LayerService($http) {
             title: layers[i].Title || layers[i].Name,
             source: {
               type: 'TileWMS',
-              url: url + 'wms',
+              url: url,
               params: {
+                'SERVICE': 'WMS',
                 'LAYERS': layers[i].Name,
                 'TILED': true,
               },

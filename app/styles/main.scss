@@ -74,9 +74,14 @@ li.selected {
   z-index: 500;
 }
 
+.ol-zoom {
+  left: 300px !important;
+}
+
 #simulation-panel {
   position: absolute;
-  left: 0;
+  top: 0px;
+  left: 0px;
   width: 300px;
   z-index: 500;
 }

@@ -78,6 +78,14 @@ li.selected {
   left: 300px !important;
 }
 
+#alertbox {
+  position: absolute;
+  top: 0px;
+  left: 360px;
+  max-width: 50%;
+  z-index: 1000;
+}
+
 #simulation-panel {
   position: absolute;
   top: 0px;

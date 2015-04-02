@@ -5,8 +5,8 @@ angular.module('simCityWebApp')
   .controller('TaskListCtrl', TaskListController);
   // .controller('RemoveTaskModalInstanceCtrl', RemoveTaskModalInstanceController);
 
-TaskListController.$inject = ['MessageBus', 'LayerService', 'SimCityWebService', '$interval'];
-function TaskListController(MessageBus, LayerService, WebService, $interval) {
+TaskListController.$inject = ['MessageBus', 'LayerService', 'SimCityWebService', '$interval', 'AlertService'];
+function TaskListController(MessageBus, LayerService, WebService, $interval, AlertService) {
   var vm = this;
 
   vm.modalRemove = modalRemove;
@@ -100,8 +100,10 @@ function TaskListController(MessageBus, LayerService, WebService, $interval) {
         updateView()
           .then(function() {
             $('#removeSimulationModal').modal('hide');
+            AlertService.add('success', 'Removed simulation.');
           }, function() {
             $('#removeSimulationModal').modal('hide');
+            AlertService.add('success', 'Removed simulation (but failed to reload simulation overview).');
           });
       })
       .error(function (data, status) {

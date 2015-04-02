@@ -51,6 +51,8 @@
       <h1 class="navbar-brand">SIM-CITY Web</h1>
     </div> -->
 
+    <div ng-include="'views/alert.html'" ng-controller="AlertCtrl as vm"></div>
+
     <div id="overview-panel" class="panel-group pull-right" id="accordion" role="tablist">
       <div id="infrastructure-panel" class="panel panel-default">
         <div class="panel-heading" role="tab">
@@ -117,10 +119,12 @@
     <!-- endbuild -->
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
-        <script src="scripts/services/messagebus.js"></script>
+        <script src="scripts/services/alertservice.js"></script>
         <script src="scripts/services/layers.js"></script>
+        <script src="scripts/services/messagebus.js"></script>
         <script src="scripts/services/webservice.js"></script>
         <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/alert.js"></script>
         <script src="scripts/controllers/tasks.js"></script>
         <script src="scripts/controllers/parameters.js"></script>
         <script src="scripts/controllers/overview.js"></script>

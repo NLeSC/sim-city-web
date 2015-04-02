@@ -11,9 +11,9 @@
  */
 angular.module('simCityWebApp').controller('MapCtrl', MapController);
 
-MapController.$inject = ['$scope', '$timeout', '$http', 'LayerService'];
+MapController.$inject = ['$scope', '$http', 'LayerService'];
 
-function MapController($scope, $timeout, $http, LayerService) {
+function MapController($scope, $http, LayerService) {
   var vm = this;
 
   vm.bangalore = {

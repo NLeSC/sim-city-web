@@ -6,9 +6,9 @@ angular.module('simCityWebApp')
 .controller('ParameterListCtrl', ParameterListController);
 
 
-ParameterListController.$inject = ['$http', 'MessageBus', 'SimCityWebService'];
+ParameterListController.$inject = ['$http', 'MessageBus', 'SimCityWebService', 'AlertService'];
 
-function ParameterListController($http, MessageBus, SimCityWebService) {
+function ParameterListController($http, MessageBus, SimCityWebService, AlertService) {
   var vm = this;
   var version = '0.3';
   var simulation = 'matsim';
@@ -30,6 +30,18 @@ function ParameterListController($http, MessageBus, SimCityWebService) {
       SimCityWebService.submitTask('matsim', vm.input)
         .success(function() {
           vm.submitstatus = 'success';
+          AlertService.add('success', 'Added simulation \'' + vm.input.name + '\'');
+        })
+        .error(function(data, status) {
+          var message = 'Cannot add \'' + vm.input.name + '\'';
+          if (status === 400 && data && data.error) {
+            message += ': ' + data.error;
+          } else if (status === 500){
+            message += ': internal server error';
+          } else if (status === 502){
+            message += ': cannot reach database';
+          }
+          AlertService.add('error', message);
         });
   }
 

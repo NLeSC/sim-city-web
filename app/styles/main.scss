@@ -80,10 +80,20 @@ li.selected {
 
 #alertbox {
   position: absolute;
-  top: 0px;
+  top: 10px;
   left: 360px;
-  max-width: 50%;
+  min-width: 100px;
+  width: 30%;
+  max-width: 500px;
   z-index: 1000;
+}
+
+#alertbox .alert {
+  margin-bottom: 5px !important;
+}
+
+#alertbox .collapsing {
+  padding-bottom: 0px !important;
 }
 
 #simulation-panel {

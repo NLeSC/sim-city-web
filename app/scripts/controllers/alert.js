@@ -12,13 +12,16 @@ function AlertController(AlertService, $timeout) {
   vm.dismiss = dismiss;
   vm.initiate = initiate;
 
-  function dismiss(alert) {
-    alert.initiated = false;
-    $timeout(function() { AlertService.remove(alert.index); }, 1000);
+  function initiate(alert) {
+    $timeout(function() {
+      $('.alert-' + alert.index).collapse('show');
+      $timeout(function() { vm.dismiss(alert); }, 10000);
+    }, 1);
   }
 
-  function initiate(alert) {
-    $timeout(function() { alert.initiated = true; }, 100);
+  function dismiss(alert) {
+    $('.alert-' + alert.index).collapse('hide');
+    $timeout(function() { AlertService.remove(alert.index); }, 1000);
   }
 }
 

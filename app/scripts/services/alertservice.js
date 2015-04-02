@@ -4,8 +4,8 @@
 angular.module('simCityWebApp').
   service('AlertService', AlertService);
 
-AlertService.$inject = ['$timeout'];
-function AlertService($timeout) {
+AlertService.$inject = [];
+function AlertService() {
   var vm = this;
   vm.add = add;
   vm.alerts = [];
@@ -16,7 +16,6 @@ function AlertService($timeout) {
   function add(type, message) {
     var index = vm.currentIndex++;
     vm.alerts.push({index: index, type: type, message: message});
-    $timeout(function() { vm.remove(index); }, 10000);
   }
   function remove(idx) {
     if (vm.alerts.length > 0) {

@@ -1,9 +1,9 @@
 <ul id="alertbox">
   <li
     ng-repeat="alert in vm.alerts track by alert.index"
-    class="alert alert-dismissable collapse"
+    class="alert alert-dismissable collapse alert-{{alert.index}}"
+    ng-class="{'alert-danger': alert.type === 'error', 'alert-warning': alert.type === 'warning', 'alert-info': alert.type === 'info', 'alert-success': alert.type === 'success'}"
     ng-init="vm.initiate(alert)"
-    ng-class="{'in': alert.initiated, 'alert-danger': alert.type === 'error', 'alert-warning': alert.type === 'warning', 'alert-info': alert.type === 'info', 'alert-success': alert.type === 'success'}"
     role="alert">
     <button type="button" class="close" ng-click="vm.dismiss(alert)" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     {{alert.message}}

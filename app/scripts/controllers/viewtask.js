@@ -20,8 +20,8 @@ angular.module('simCityWebApp')
     };
   });
 
-  ViewTaskController.$inject = ['MessageBus', 'SimCityWebService'];
-function ViewTaskController(MessageBus, WebService) {
+ViewTaskController.$inject = ['MessageBus', 'SimCityWebService', 'LayerService'];
+function ViewTaskController(MessageBus, WebService, LayerService) {
   var vm = this;
 
   vm.activate = activate;
@@ -29,6 +29,7 @@ function ViewTaskController(MessageBus, WebService) {
   vm.status = 'Loading...';
   vm.task = {};
   vm.urlBase = '/couchdb/simcity/';
+  vm.visualize = visualize;
 
   MessageBus.subscribe('task.selected', vm.activate);
 
@@ -54,6 +55,24 @@ function ViewTaskController(MessageBus, WebService) {
       .error(function() {
         vm.status = 'Cannot load task information.';
       });
+  }
+
+  function visualize(file) {
+    var layer = LayerService.addVectorLayer({
+      name: vm.task.id + '_' + file,
+      title: '\'' + vm.task.input.name + '\': <' + file + '>',
+      source: {
+        type: 'GeoJSON',
+        url: vm.urlBase + vm.task.id + '/' + file,
+      },
+      style: {
+        stroke: {
+          color: '#00FF00',
+          width: 2,
+        },
+      },
+    });
+    LayerService.activateLayer(layer);
   }
 
   function deactivate() {

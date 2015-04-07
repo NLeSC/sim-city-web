@@ -8,7 +8,7 @@
     <span class="glyphicon glyphicon-picture
 glyphicon glyphicon-picture" ng-show="layer.contentType === 'Image'"></span><span class="glyphicon glyphicon-picture
 glyphicon glyphicon-map-marker" ng-show="layer.contentType === 'Vector'"></span> {{layer.title}}
-    <a href="#" ng-click="vm.layerService.deactivateLayer(layer)" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
+    <a href="#" ng-click="vm.layerService.deactivateLayer(layer.id)" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
     </li>
 </ul>
 <div class="form-group">

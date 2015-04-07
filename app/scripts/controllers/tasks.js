@@ -15,7 +15,8 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
   vm.tasks = [];
   vm.updateView = updateView;
   vm.viewTask = viewTask;
-  vm.visualize = visualize;
+  vm.visualizeFire = visualizeFire;
+  vm.visualizeTraffic = visualizeTraffic;
 
   updateView();
   MessageBus.subscribe('task.submitted', updateView);
@@ -44,8 +45,8 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
   // reverse sort
   var sortedStyleByVolumeKeys = Object.keys(styleByVolume).sort(function(a,b){return b-a;});
 
-  function visualize(task) {
-    var layer = LayerService.addVectorLayer({
+  function visualizeTraffic(task) {
+    var layerId = LayerService.addVectorLayer({
       name: task.id + '_volume',
       title: '\'' + task.input.name + '\' link volume',
       source: {
@@ -61,7 +62,69 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
         }
       },
     });
-    LayerService.activateLayer(layer);
+    LayerService.activateLayer(layerId);
+  }
+
+  var styleByResponseTime = {
+    0: [new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'yellow',
+            opacity: 0.5,
+            width: 3,
+          })
+        })],
+    100: [new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'orange',
+            opacity: 0.5,
+            width: 3,
+          })
+        })],
+    200: [new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'red',
+            opacity: 0.5,
+            width: 4,
+          })
+        })],
+  };
+  var sortedStyleByResponseKeys = Object.keys(styleByResponseTime).sort(function(a,b){return b-a;});
+  function visualizeFire(task) {
+    var layerId = LayerService.addVectorLayer({
+      name: task.id + '_fire_path',
+      title: '\'' + task.input.name + '\' fire engine paths',
+      source: {
+        type: 'GeoJSON',
+        url: task.url + '/GeoFirePaths.json',
+      },
+      style: function(feature) {
+        var response = feature.getProperties().responsetime;
+        for (var i = 0; i < sortedStyleByResponseKeys.length; i++) {
+          if (response >= sortedStyleByResponseKeys[i]) {
+            return styleByResponseTime[sortedStyleByResponseKeys[i]];
+          }
+        }
+      },
+    });
+    LayerService.activateLayer(layerId);
+    var fireLayer = LayerService.getVectorLayer('blr_fires');
+    if (fireLayer) {
+      fireLayer.style = {
+        icon: {
+          src: 'images/fire.png'
+        },
+      };
+      LayerService.activateLayer(fireLayer.id);
+    }
+    var firestationLayer = LayerService.getVectorLayer('blr_firestations');
+    if (firestationLayer) {
+      firestationLayer.style = {
+        icon: {
+          src: 'images/firestation.png'
+        },
+      };
+      LayerService.activateLayer(firestationLayer.id);
+    }
   }
 
   function viewTask(task) {

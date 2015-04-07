@@ -8,6 +8,7 @@
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
+    <td>&nbsp;</td>
   </tr>
   <tr ng-hide="vm.status" ng-repeat="task in vm.tasks track by task.id | orderBy : task.input.commute-percentage">
     <td ng-bind="task.input['name']"></td>
@@ -15,10 +16,14 @@
     <td ng-switch="task.done">
       <span ng-switch-when="-1" title="simulation error" class="glyphicon glyphicon-warning-sign"></span>
       <span ng-switch-when="0" title="no output" class="glyphicon glyphicon-eye-close"></span>
-      <a ng-switch-default href="#visualize" ng-click="vm.visualize(task)" title="show output"><span class="glyphicon glyphicon-eye-open"></span></a>
+      <span ng-switch-default>
+        <a href="#visualizeTraffic" ng-click="vm.visualizeTraffic(task)" title="Show traffic">
+          <span class="glyphicon glyphicon-road"></span></a>
+      <span>
     </td>
-    <td><a href="#" ng-click="vm.viewTask(task)" title="get raw data"><span class="glyphicon glyphicon-save-file"></span></a></td></td>
-    <td><a href="#" ng-click="vm.modalRemove(task)" class="text-danger" title="remove simulation" data-target="#removeSimulationModal" data-toggle="modal"><span class="glyphicon glyphicon-remove-circle"></span></a></td>
+    <td><a ng-if="task.done > 0" href="#visualizeFire" ng-click="vm.visualizeFire(task)" title="Show fire response"><span class="glyphicon glyphicon-fire"></span></a></td>
+    <td><a href="#" ng-click="vm.viewTask(task)" title="Show data"><span class="glyphicon glyphicon-save-file"></span></a></td></td>
+    <td><a href="#" ng-click="vm.modalRemove(task)" class="text-danger" title="Remove simulation" data-target="#removeSimulationModal" data-toggle="modal"><span class="glyphicon glyphicon-remove-circle"></span></a></td>
   </tr>
 </table>
 

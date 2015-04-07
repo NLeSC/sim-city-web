@@ -16,11 +16,15 @@ function LayerService($http) {
   vm.addVectorLayer = addVectorLayer;
   vm.addLayersFromOWS = addLayersFromOWS;
   vm.baseLayers = [];
-  vm.inactiveLayers = [];
-  vm.showLayers = [];
   vm.deactivateLayer = deactivateLayer;
-  vm.insertActiveLayer = insertActiveLayer;
+  vm.getVectorLayer = getVectorLayer;
+  vm.getImageLayer = getImageLayer;
+  vm.inactiveLayers = [];
+  vm.moveActiveLayer = moveActiveLayer;
+  vm.removeVectorLayer = removeVectorLayer;
+  vm.removeImageLayer = removeImageLayer;
   vm.selectBaseLayer = selectBaseLayer;
+  vm.showLayers = [];
 
   vm.addBaseLayer({
     name: 'toner',
@@ -66,10 +70,12 @@ function LayerService($http) {
     },
   });
 
-  function deactivateLayer(layer) {
-    insertSorted(layer, vm.inactiveLayers);
-    remove(layer, vm.activeLayers);
-    updateLayers();
+  function deactivateLayer(layerId) {
+    var layer = remove(layerId, vm.activeLayers);
+    if (layer) {
+      insertSorted(layer, vm.inactiveLayers);
+      updateLayers();
+    }
   }
 
   function updateLayers() {
@@ -78,40 +84,39 @@ function LayerService($http) {
       .map(function(l, idx){l.index = idx; return l;});
   }
 
-  function activateLayer(layer) {
-    vm.activeLayers.push(layer); // add as top layer
-    remove(layer, vm.inactiveLayers);
-    updateLayers();
+  function activateLayer(layerId) {
+    var layer = remove(layerId, vm.inactiveLayers);
+    if (layer) {
+      vm.activeLayers.push(layer); // add as top layer
+      updateLayers();
+    }
   }
   function addBaseLayer(layer) {
     layer.id = layer.name;
     layer.source.name = layer.id;
-    if (!vm.activeBaseLayer) {
-      vm.selectBaseLayer(layer);
-    }
     vm.baseLayers.push(layer);
-  }
-
-  function indexOf(layer, layerList) {
-    return layerList.map(getId).indexOf(layer.id);
-  }
-
-  function remove(layer, layerList) {
-    var idx = indexOf(layer, layerList);
-    if (idx !== -1) {
-      layerList.splice(idx, 1);
+    if (!vm.activeBaseLayer) {
+      vm.selectBaseLayer(layer.id);
     }
-    return idx;
   }
 
-  function insertActiveLayer(newIdx, layer) {
-    var oldIdx = indexOf(layer, vm.activeLayers);
+  function indexOf(layerId, layerList) {
+    return layerList.map(getId).indexOf(layerId);
+  }
+
+  function remove(layerId, layerList) {
+    var idx = indexOf(layerId, layerList);
+    if (idx !== -1) {
+      return layerList.splice(idx, 1)[0];
+    }
+  }
+
+  function moveActiveLayer(newIdx, layerId) {
+    var oldIdx = indexOf(layerId, vm.activeLayers);
     if (oldIdx !== newIdx) {
-      if (oldIdx !== -1) {
-        vm.activeLayers.splice(oldIdx, 1);
-        if (newIdx > oldIdx) {
-          newIdx--;
-        }
+      var layer = vm.activeLayers.splice(oldIdx, 1)[0];
+      if (newIdx > oldIdx) {
+        newIdx--;
       }
       vm.activeLayers.splice(newIdx, 0, layer);
       updateLayers();
@@ -122,11 +127,11 @@ function LayerService($http) {
     layer.id = layer.name + '_' + type;
     layer.contentType = type;
     layer.source.name = layer.id;
-    if (vm.activeLayers.map(getId).indexOf(layer.id) === -1 &&
-        vm.inactiveLayers.map(getId).indexOf(layer.id) === -1) {
+    if (indexOf(layer.id, vm.activeLayers) === -1 &&
+        indexOf(layer.id, vm.inactiveLayers) === -1) {
       insertSorted(layer, vm.inactiveLayers);
     }
-    return layer;
+    return layer.id;
   }
 
   function addImageLayer(layer) {
@@ -135,6 +140,44 @@ function LayerService($http) {
 
   function addVectorLayer(layer) {
     return addLayer(layer, 'Vector');
+  }
+
+  function getLayer(name, type) {
+    var layerId = name + '_' + type;
+    var idx = indexOf(layerId, vm.activeLayers);
+    if (idx !== -1) {
+      return vm.activeLayers[idx];
+    }
+    idx = indexOf(layerId, vm.inactiveLayers);
+    if (idx !== -1) {
+      return vm.inactiveLayers[idx];
+    }
+  }
+
+  function getImageLayer(name) {
+    return getLayer(name, 'Image');
+  }
+  function getVectorLayer(name) {
+    return getLayer(name, 'Vector');
+  }
+
+  function removeLayer(name, type) {
+    var layerId = name + '_' + type;
+    var idx = indexOf(layerId, vm.activeLayers);
+    if (idx !== -1) {
+      return vm.activeLayers.splice(idx, 1)[0];
+    }
+    idx = indexOf(layerId, vm.inactiveLayers);
+    if (idx !== -1) {
+      return vm.inactiveLayers.splice(idx, 1)[0];
+    }
+  }
+
+  function removeImageLayer(name) {
+    return removeLayer(name, 'Image');
+  }
+  function removeVectorLayer(name) {
+    return removeLayer(name, 'Vector');
   }
 
   function addLayersFromOWS(url) {
@@ -173,9 +216,10 @@ function LayerService($http) {
       });
     }
 
-  function selectBaseLayer(layer) {
+  function selectBaseLayer(layerId) {
     // unfortunately, directly selecting does not trigger an update.
-    vm.activeBaseLayer = layer;
+    var idx = indexOf(layerId, vm.baseLayers);
+    vm.activeBaseLayer = vm.baseLayers[idx];
     updateLayers();
   }
 }

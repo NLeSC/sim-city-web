@@ -58,9 +58,9 @@ function ViewTaskController(MessageBus, WebService, LayerService) {
   }
 
   function visualize(file) {
-    var layer = LayerService.addVectorLayer({
+    var layerId = LayerService.addVectorLayer({
       name: vm.task.id + '_' + file,
-      title: '\'' + vm.task.input.name + '\': <' + file + '>',
+      title: '\'' + vm.task.input.name + '\': ' + file,
       source: {
         type: 'GeoJSON',
         url: vm.urlBase + vm.task.id + '/' + file,
@@ -72,7 +72,7 @@ function ViewTaskController(MessageBus, WebService, LayerService) {
         },
       },
     });
-    LayerService.activateLayer(layer);
+    LayerService.activateLayer(layerId);
   }
 
   function deactivate() {

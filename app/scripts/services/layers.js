@@ -163,14 +163,8 @@ function LayerService($http) {
 
   function removeLayer(name, type) {
     var layerId = name + '_' + type;
-    var idx = indexOf(layerId, vm.activeLayers);
-    if (idx !== -1) {
-      return vm.activeLayers.splice(idx, 1)[0];
-    }
-    idx = indexOf(layerId, vm.inactiveLayers);
-    if (idx !== -1) {
-      return vm.inactiveLayers.splice(idx, 1)[0];
-    }
+    return (remove(layerId, vm.activeLayers) ||
+            remove(layerId, vm.inactiveLayers));
   }
 
   function removeImageLayer(name) {

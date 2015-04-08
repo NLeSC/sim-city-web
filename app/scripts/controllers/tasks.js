@@ -68,21 +68,21 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
   var styleByResponseTime = {
     0: [new ol.style.Style({
           stroke: new ol.style.Stroke({
-            color: 'yellow',
+            color: '#35ff20',
             opacity: 0.5,
             width: 3,
           })
         })],
     100: [new ol.style.Style({
           stroke: new ol.style.Stroke({
-            color: 'orange',
+            color: '#29ffba',
             opacity: 0.5,
             width: 3,
           })
         })],
-    200: [new ol.style.Style({
+    150: [new ol.style.Style({
           stroke: new ol.style.Stroke({
-            color: 'red',
+            color: '#0000ff',
             opacity: 0.5,
             width: 4,
           })

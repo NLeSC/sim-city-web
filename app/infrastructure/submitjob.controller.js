@@ -10,11 +10,11 @@
  * Controller of the simCityWebApp
  */
 angular.module('simCityWebApp')
-  .controller('MainCtrl', MainController);
+  .controller('SubmitJobCtrl', SubmitJobController);
 
-MainController.$inject = ['SimCityWebService', 'MessageBus'];
+  SubmitJobController.$inject = ['SimCityWebService', 'MessageBus'];
 
-function MainController(SimCityWebService, MessageBus) {
+function SubmitJobController(SimCityWebService, MessageBus) {
   var vm = this;
   vm.startJob = startJob;
 

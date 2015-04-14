@@ -51,7 +51,7 @@
       <h1 class="navbar-brand">SIM-CITY Web</h1>
     </div> -->
 
-    <div ng-include="'views/alert.html'" ng-controller="AlertCtrl as vm"></div>
+    <div ng-include="'alert/alert.html'" ng-controller="AlertCtrl as vm"></div>
 
     <div id="overview-panel" class="panel-group pull-right" id="accordion" role="tablist">
       <div id="infrastructure-panel" class="panel panel-default">
@@ -59,8 +59,8 @@
           <h3 class="panel-title"><a data-parent="#accordion" data-toggle="collapse" href="#infrastructure-body"><span class="glyphicon glyphicon-dashboard"></span> Infrastructure</a></h3>
         </div>
         <div id="infrastructure-body" class="collapse" role="tabpanel">
-          <div ng-include="'views/overview.html'" ng-controller="OverviewCtrl as vm"></div>
-          <div ng-include="'views/main.html'" ng-controller="MainCtrl as vm"></div>
+          <div ng-include="'infrastructure/overview.html'" ng-controller="OverviewCtrl as vm"></div>
+          <div ng-include="'infrastructure/submitjob.html'" ng-controller="SubmitJobCtrl as vm"></div>
         </div>
       </div>
       <div id="layers-panel" class="panel panel-default">
@@ -68,7 +68,7 @@
           <h3 class="panel-title"><a data-parent="#accordion" data-toggle="collapse" href="#layers-body"><span class="glyphicon glyphicon-picture"></span> Layers</a></h3>
         </div>
         <div id="layers-body" class="collapse in">
-          <div ng-include="'views/layers.html'" ng-controller="LayerCtrl as vm"></div>
+          <div ng-include="'map/layers.html'" ng-controller="LayerCtrl as vm"></div>
         </div>
       </div>
     </div>
@@ -79,7 +79,7 @@
           <h3 class="panel-title">Simulations</h3>
         </div>
         <div class="panel-body">
-          <div ng-include="'views/tasks.html'" ng-controller="TaskListCtrl as vm"></div>
+          <div ng-include="'tasks/tasks.html'" ng-controller="TaskListCtrl as vm"></div>
         </div>
       </div>
       <div id="newtask-panel" class="panel panel-default">
@@ -87,14 +87,14 @@
           <h3 class="panel-title">New simulation</h3>
         </div>
         <div class="panel-body">
-          <div ng-include="'views/parameters.html'" ng-controller="ParameterListCtrl as vm"></div>
+          <div ng-include="'tasks/parameters.html'" ng-controller="ParameterListCtrl as vm"></div>
         </div>
       </div>
     </div>
 
 
     <div class="container-fluid container-map">
-      <div ng-include="'views/map.html'" ng-controller="MapCtrl as vm"></div>
+      <div ng-include="'map/map.html'" ng-controller="MapCtrl as vm"></div>
     </div>
 
     <div class="footer">
@@ -102,7 +102,7 @@
       </div>
     </div>
 
-    <div ng-include="'views/viewtask.html'" ng-controller="ViewTaskCtrl as vm"></div>
+    <div ng-include="'tasks/viewtask.html'" ng-controller="ViewTaskCtrl as vm"></div>
 
     <script src="include/scripts/ol.min.js"></script>
     <!-- build:js(.) scripts/vendor.js -->
@@ -118,19 +118,20 @@
     <!-- endbower -->
     <!-- endbuild -->
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/services/alertservice.js"></script>
-        <script src="scripts/services/layers.js"></script>
-        <script src="scripts/services/messagebus.js"></script>
-        <script src="scripts/services/webservice.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/alert.js"></script>
-        <script src="scripts/controllers/tasks.js"></script>
-        <script src="scripts/controllers/parameters.js"></script>
-        <script src="scripts/controllers/overview.js"></script>
-        <script src="scripts/controllers/map.js"></script>
-        <script src="scripts/controllers/layers.js"></script>
-        <script src="scripts/controllers/viewtask.js"></script>
+        <script src="app.module.js"></script>
+        <script src="alert/alert.service.js"></script>
+        <script src="alert/alert.controller.js"></script>
+        <script src="infrastructure/overview.controller.js"></script>
+        <script src="infrastructure/submitjob.controller.js"></script>
+        <script src="map/layers.service.js"></script>
+        <script src="map/layers.controller.js"></script>
+        <script src="map/map.controller.js"></script>
+        <script src="services/bytes.filter.js"></script>
+        <script src="services/messagebus.service.js"></script>
+        <script src="services/webservice.service.js"></script>
+        <script src="tasks/tasks.controller.js"></script>
+        <script src="tasks/viewtask.controller.js"></script>
+        <script src="tasks/parameters.controller.js"></script>
         <!-- endbuild -->
 </body>
 </html>

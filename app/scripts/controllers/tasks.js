@@ -5,8 +5,8 @@ angular.module('simCityWebApp')
   .controller('TaskListCtrl', TaskListController);
   // .controller('RemoveTaskModalInstanceCtrl', RemoveTaskModalInstanceController);
 
-TaskListController.$inject = ['MessageBus', 'LayerService', 'SimCityWebService', '$interval', 'AlertService'];
-function TaskListController(MessageBus, LayerService, WebService, $interval, AlertService) {
+TaskListController.$inject = ['MessageBus', 'LayerService', 'SimCityWebService', '$interval', 'AlertService', 'RangeFactory'];
+function TaskListController(MessageBus, LayerService, WebService, $interval, AlertService, RangeFactory) {
   var vm = this;
 
   vm.modalRemove = modalRemove;
@@ -22,28 +22,15 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
   MessageBus.subscribe('task.submitted', updateView);
   $interval(updateView, 10000);
 
-  var styleByVolume = {
-    0: [new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'yellow',
-            width: 3,
-          })
-        })],
-    12: [new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'orange',
-            width: 3,
-          })
-        })],
-    25: [new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: 'red',
-            width: 4,
-          })
-        })],
-  };
-  // reverse sort
-  var sortedStyleByVolumeKeys = Object.keys(styleByVolume).sort(function(a,b){return b-a;});
+  var volumeColor = new RangeFactory.colorConverter(0, 100, 0.2, 0.0);
+  var volumeStyle = function(feature) {
+    return [ new ol.style.Style({
+       stroke: new ol.style.Stroke({
+         color: volumeColor.convert(feature.getProperties().volume),
+         width: 4,
+       })
+     }) ];
+   };
 
   function visualizeTraffic(task) {
     var layerId = LayerService.addVectorLayer({
@@ -53,42 +40,21 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
         type: 'GeoJSON',
         url: task.url + '/GeoLinkVolume.8.json',
       },
-      style: function(feature) {
-        var volume = feature.getProperties().volume;
-        for (var i = 0; i < sortedStyleByVolumeKeys.length; i++) {
-          if (volume >= sortedStyleByVolumeKeys[i]) {
-            return styleByVolume[sortedStyleByVolumeKeys[i]];
-          }
-        }
-      },
+      style: volumeStyle,
     });
     LayerService.activateLayer(layerId);
   }
 
-  var styleByResponseTime = {
-    0: [new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: '#35ff20',
-            opacity: 0.5,
-            width: 3,
-          })
-        })],
-    100: [new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: '#29ffba',
-            opacity: 0.5,
-            width: 3,
-          })
-        })],
-    150: [new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: '#0000ff',
-            opacity: 0.5,
-            width: 4,
-          })
-        })],
-  };
-  var sortedStyleByResponseKeys = Object.keys(styleByResponseTime).sort(function(a,b){return b-a;});
+  var fireColor = new RangeFactory.colorConverter(0, 200, 0.4, 0.7);
+  var fireStyle = function(feature) {
+    return [ new ol.style.Style({
+       stroke: new ol.style.Stroke({
+         color: fireColor.convert(feature.getProperties().responsetime),
+         width: 4,
+       })
+     }) ];
+   };
+
   function visualizeFire(task) {
     var layerId = LayerService.addVectorLayer({
       name: task.id + '_fire_path',
@@ -97,14 +63,7 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
         type: 'GeoJSON',
         url: task.url + '/GeoFirePaths.json',
       },
-      style: function(feature) {
-        var response = feature.getProperties().responsetime;
-        for (var i = 0; i < sortedStyleByResponseKeys.length; i++) {
-          if (response >= sortedStyleByResponseKeys[i]) {
-            return styleByResponseTime[sortedStyleByResponseKeys[i]];
-          }
-        }
-      },
+      style: fireStyle,
     });
     LayerService.activateLayer(layerId);
     var fireLayer = LayerService.getVectorLayer('blr_fires');

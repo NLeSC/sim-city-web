@@ -10,6 +10,7 @@ function SimCityWebService($http, MessageBus, $q) {
   var vm = this;
 
   vm.deleteTask = deleteTask;
+  vm.getSimulation = getSimulation;
   vm.getTask = getTask;
   vm.overview = overview;
   vm.submitJob = submitJob;
@@ -38,7 +39,16 @@ function SimCityWebService($http, MessageBus, $q) {
         MessageBus.publish('task.submitted', task);
       })
       .error(function(data, status, headers, config, statusText) {
-        MessageBus.publish('task.failed', formatHTTPError(data, status, statusText, 'error starting simulation'));
+        var detailedMessage = formatHTTPError(data, status, statusText, 'error starting simulation');
+        var message = 'Cannot add \'' + params.name + '\'';
+        if (status === 400 && data && data.error) {
+          message += ': ' + data.error;
+        } else if (status === 500){
+          message += ': internal server error';
+        } else if (status === 502){
+          message += ': cannot reach database';
+        }
+        return $q.reject(message, detailedMessage);
       });
   }
 
@@ -48,6 +58,10 @@ function SimCityWebService($http, MessageBus, $q) {
 
   function getTask(id) {
     return $http.get('/explore/simulation/' + id);
+  }
+
+  function getSimulation(name, version) {
+    return $http.get('/explore/simulate/' + name + '/' + version);
   }
 
   function deleteTask(id, rev) {

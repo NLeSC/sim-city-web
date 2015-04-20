@@ -34,7 +34,10 @@ module.exports = function (grunt) {
         tasks: ['wiredep']
       },
       js: {
-        files: ['<%= yeoman.app %>/{,*/}*.js'],
+        files: [
+          '<%= yeoman.app %>/{,*/}*.js',
+          '!<%= yeoman.app %>/{,*/}*.spec.js'
+        ],
         tasks: ['newer:jshint:all'],
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -266,6 +269,7 @@ module.exports = function (grunt) {
       dist: {
         src: [
           '<%= yeoman.dist %>/{,*/}*.js',
+          '!<%= yeoman.dist %>/{,*/}*.spec.js',
           '<%= yeoman.dist %>/styles/{,*/}*.css',
           '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
           '<%= yeoman.dist %>/styles/fonts/*'
@@ -296,14 +300,18 @@ module.exports = function (grunt) {
     usemin: {
       html: ['<%= yeoman.dist %>/{,*/}*.html'],
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
-      js: ['<%= yeoman.dist %>/{,*/}*.module.js', '<%= yeoman.dist %>/{,*/}*.js'],
+      js: [
+        '<%= yeoman.dist %>/{,*/}*.module.js',
+        '<%= yeoman.dist %>/{,*/}*.js',
+        '!<%= yeoman.dist %>/{,*/}*.spec.js',
+      ],
       options: {
         assetsDirs: [
           '<%= yeoman.dist %>',
           '<%= yeoman.dist %>/images',
-          '<%= yeoman.dist %>/styles'
+          '<%= yeoman.dist %>/styles',
         ],
-	patterns: {
+	    patterns: {
           js: [
             [/(images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the JS to reference our revved images']
           ]

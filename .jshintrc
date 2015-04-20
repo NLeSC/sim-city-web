@@ -17,10 +17,12 @@
   "strict": true,
   "trailing": true,
   "smarttabs": true,
+  "jasmine": true,
   "globals": {
     "angular": false,
     "ol": false,
     "$": false,
-    "jquery": false
+    "jquery": false,
+    "inject": false
   }
 }

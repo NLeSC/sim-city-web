@@ -1,9 +1,11 @@
 (function(){
-
 'use strict';
 
-angular.module('simCityWebApp').
-  service('MessageBus', ['$rootScope', function ($rootScope) {
+angular.module('simCityWebApp')
+  .service('MessageBus', MessageBus);
+
+MessageBus.$inject = ['$rootScope'];
+function MessageBus($rootScope) {
   /**
    * Publish an event
    *
@@ -26,6 +28,6 @@ angular.module('simCityWebApp').
   this.subscribe = function() {
     return $rootScope.$on.apply($rootScope, arguments);
   };
-}]);
+}
 
 })();

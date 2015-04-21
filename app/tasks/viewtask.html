@@ -1,0 +1,81 @@
+<div id="viewTaskModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">&times;</button>
+        <h3 ng-show="vm.status" class="modal-title" ng-bind="vm.status"></h3>
+        <h3 ng-hide="vm.status" class="modal-title" ng-bind-template="Simulation '{{vm.task.input.name}}'"></h3>
+      </div>
+      <div class="modal-body" ng-hide="vm.status">
+        <h4>Input</h4>
+        <table class="table">
+          <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+          </tr>
+          <tr ng-repeat="(key, value) in vm.task.input track by key">
+            <td ng-bind="key"></td><td ng-bind="value"></td>
+          </tr>
+        </table>
+
+        <h4>Errors</h4>
+        <p ng-if="vm.task.error.length == 0">None</p>
+
+        <table class="table" ng-if="vm.task.error.length > 0">
+          <tr>
+            <th>Time</th><th>Message</th><th>Details</th>
+          </tr>
+          <tr ng-repeat="error in vm.task.error">
+            <td ng-bind="error.time"></td><td ng-bind="error.message"></td><td ng-bind="error.exception || ''"></td>
+          </tr>
+        </table>
+
+        <h4>Output</h4>
+        <p ng-if="!vm.task._attachments">None</p>
+        <table class="table" ng-if="vm.task._attachments">
+          <tr>
+            <th>File</th><th>Size</th><td>&nbsp;</td>
+          </tr>
+          <tr ng-repeat="(name, attachment) in vm.task._attachments track by name">
+            <td ng-bind="name"></td><td ng-bind="attachment.length | bytes" class="text-right"></td><td>
+              <a href="#" ng-if="name.indexOf('.json', name.length - 5) !== -1" title="Show" ng-click="vm.visualize(name)" data-dismiss="modal"><span class="glyphicon glyphicon-eye-open"></span></a>
+              <a href="{{vm.urlBase}}{{vm.task.id}}/{{name}}" title="download" download><span class="glyphicon glyphicon-download-alt"></span></a>
+            </td>
+          </tr>
+        </table>
+
+        <h4>Technical details</h4>
+        <table class="table">
+          <tr>
+            <th>Name</th>
+            <th>Value</th>
+          </tr>
+          <tr>
+            <td>ID</td><td ng-bind="vm.task.id"></td>
+          </tr>
+          <tr>
+            <td>script</td><td ng-bind="vm.task.command"></td>
+          </tr>
+          <tr>
+            <td>host</td><td ng-bind="vm.task.hostname"></td>
+          </tr>
+          <tr>
+            <td>URL</td><td><a href="/couchdb/simcity/{{vm.task.id}}" target="_blank" title="raw JSON output" ng-bind-template="/couchdb/simcity/{{vm.task.id}}"></a></td>
+          </tr>
+          <tr>
+            <td>started processing</td><td ng-bind="vm.task.lockDate"></td>
+          </td>
+          <tr>
+            <td>done processing</td><td ng-bind="vm.task.doneDate"></td>
+          </td>
+          <tr>
+            <td>revision</td><td ng-bind="vm.task.rev"></td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

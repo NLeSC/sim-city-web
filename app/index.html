@@ -1,0 +1,139 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>SIM-CITY Web</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+    <link rel="stylesheet" href="include/styles/ol.min.css">
+  </head>
+  <body ng-app="simCityWebApp">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <!-- <div class="header">
+      <div class="navbar navbar-default" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="#/">SIM-CITY Web</a>
+          </div>
+
+          <div class="collapse navbar-collapse" id="js-navbar-collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="#/">Home</a></li>
+              <li><a ng-href="#/">About</a></li>
+              <li><a ng-href="#/">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- <div class="navbar navbar-default">
+      <h1 class="navbar-brand">SIM-CITY Web</h1>
+    </div> -->
+
+    <div ng-include="'alert/alert.html'" ng-controller="AlertCtrl as vm"></div>
+
+    <div id="overview-panel" class="panel-group pull-right" id="accordion" role="tablist">
+      <div id="infrastructure-panel" class="panel panel-default">
+        <div class="panel-heading" role="tab">
+          <h3 class="panel-title"><a data-parent="#accordion" data-toggle="collapse" href="#infrastructure-body"><span class="glyphicon glyphicon-dashboard"></span> Infrastructure</a></h3>
+        </div>
+        <div id="infrastructure-body" class="collapse" role="tabpanel">
+          <div ng-include="'infrastructure/overview.html'" ng-controller="OverviewCtrl as vm"></div>
+          <div ng-include="'infrastructure/submitjob.html'" ng-controller="SubmitJobCtrl as vm"></div>
+        </div>
+      </div>
+      <div id="layers-panel" class="panel panel-default">
+        <div class="panel-heading" role="tab">
+          <h3 class="panel-title"><a data-parent="#accordion" data-toggle="collapse" href="#layers-body"><span class="glyphicon glyphicon-picture"></span> Layers</a></h3>
+        </div>
+        <div id="layers-body" class="collapse in">
+          <div ng-include="'map/layers.html'" ng-controller="LayerCtrl as vm"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="simulation-panel" class="panel-group pull-left">
+      <div id="task-panel" class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Simulations</h3>
+        </div>
+        <div class="panel-body">
+          <div ng-include="'tasks/tasks.html'" ng-controller="TaskListCtrl as vm"></div>
+        </div>
+      </div>
+      <div id="newtask-panel" class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">New simulation</h3>
+        </div>
+        <div class="panel-body">
+          <div ng-include="'tasks/parameters.html'" ng-controller="ParameterListCtrl as vm"></div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid container-map">
+      <div ng-include="'map/map.html'" ng-controller="MapCtrl as vm"></div>
+    </div>
+
+    <div id="escience-logo"><img src="images/escience-logo.png" alt="Netherlands eScience Center"></div>
+
+    <div class="footer">
+      <div class="container">
+      </div>
+    </div>
+
+    <div ng-include="'tasks/viewtask.html'" ng-controller="ViewTaskCtrl as vm"></div>
+
+    <script src="include/scripts/ol.min.js"></script>
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-openlayers-directive/dist/angular-openlayers-directive.min.js"></script>
+    <script src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="app.module.js"></script>
+        <script src="alert/alert.service.js"></script>
+        <script src="alert/alert.controller.js"></script>
+        <script src="infrastructure/overview.controller.js"></script>
+        <script src="infrastructure/submitjob.controller.js"></script>
+        <script src="map/layers.service.js"></script>
+        <script src="map/layers.controller.js"></script>
+        <script src="map/map.controller.js"></script>
+        <script src="services/bytes.filter.js"></script>
+        <script src="services/messagebus.service.js"></script>
+        <script src="services/webservice.service.js"></script>
+        <script src="tasks/tasks.controller.js"></script>
+        <script src="tasks/viewtask.controller.js"></script>
+        <script src="tasks/parameters.controller.js"></script>
+        <!-- endbuild -->
+</body>
+</html>

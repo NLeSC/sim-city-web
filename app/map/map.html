@@ -1,0 +1,5 @@
+<openlayers ol-center="vm.bangalore" ol-defaults="vm.defaults" custom-layers="true">
+    <!-- <ol-layer ol-layer-properties="vm.layerService.activeBaseLayer"></ol-layer> -->
+    <ol-layer ol-layer-properties="layer" ng-repeat="layer in vm.layerService.showLayers track by layer.id"></ol-layer>
+</openlayers>
+<div ng-if="vm.volume" style="z-index: 9999; left: 300px; top: 0px; position: absolute; background-color: #d4fb79; font-weight: bold; padding: 10px;" ng-bind-template="Volume: {{vm.volume}}"></div>

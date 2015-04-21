@@ -1,0 +1,30 @@
+<ul class="list-group" dnd-list="vm.layerService.activeLayers" dnd-drop="vm.moveLayer(index, item)">
+  <li class="list-group-item disabled" ng-if="vm.layerService.activeLayers.length === 0">None</li>
+  <li
+    class="list-group-item"
+    ng-repeat="layer in vm.layerService.activeLayers track by layer.id"
+    dnd-draggable="layer"
+    dnd-effect-allowed="move">
+    <span class="glyphicon glyphicon-picture
+glyphicon glyphicon-picture" ng-show="layer.contentType === 'Image'"></span><span class="glyphicon glyphicon-picture
+glyphicon glyphicon-map-marker" ng-show="layer.contentType === 'Vector'"></span> {{layer.title}}
+    <a href="#" ng-click="vm.layerService.deactivateLayer(layer.id)" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
+    </li>
+</ul>
+<div class="form-group">
+  <label>Add image layer</label>
+  <select ng-options="layer as layer.title for layer in vm.layerService.inactiveLayers | filter:{contentType:'Image'} track by layer.id" ng-model="vm.currentActivateLayer" ng-change="vm.activate()" class="form-control"></select>
+</div>
+<div class="form-group">
+  <label>Add vector layer</label>
+  <select ng-options="layer as layer.title for layer in vm.layerService.inactiveLayers | filter:{contentType:'Vector'} track by layer.id" ng-model="vm.currentActivateLayer" ng-change="vm.activate()" class="form-control"></select>
+</div>
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle terrain-dropdown" type="button" id="terrainMenu" data-toggle="dropdown">
+    Terrain: {{vm.layerService.activeBaseLayer.title}}
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu terrain-dropdown" role="menu">
+    <li role="presentation" ng-repeat="baseLayer in vm.layerService.baseLayers track by baseLayer.name" ng-class="{'selected': vm.layerService.activeBaseLayer === baseLayer}"><a href="#" ng-click="vm.selectTerrain(baseLayer)"><span class="glyphicon glyphicon-ok" ng-if="vm.layerService.activeBaseLayer === baseLayer"></span> {{baseLayer.title}}</a></li>
+  </ul>
+</div>

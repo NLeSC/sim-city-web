@@ -1,24 +1,8 @@
 (function() {
-
 'use strict';
 
-
 angular.module('simCityWebApp')
-  .controller('ViewTaskCtrl', ViewTaskController)
-  .filter('bytes', function() {
-    var units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
-
-    return function(bytes, precision) {
-    	if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) {
-        return '-';
-      }
-      var number = Math.max(1, Math.floor(Math.log(bytes) / Math.log(1000)));
-      if (typeof precision === 'undefined') {
-        precision = 1;
-      }
-    	return (bytes / Math.pow(1000, Math.floor(number))).toFixed(precision) +  ' ' + units[number];
-    };
-  });
+  .controller('ViewTaskCtrl', ViewTaskController);
 
 ViewTaskController.$inject = ['MessageBus', 'SimCityWebService', 'LayerService'];
 function ViewTaskController(MessageBus, WebService, LayerService) {

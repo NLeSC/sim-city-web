@@ -13,7 +13,7 @@ function AlertController(AlertService, $timeout) {
   vm.initiate = initiate;
 
   function initiate(alert) {
-    $timeout(function() {
+    return $timeout(function() {
       $('.alert-' + alert.index).collapse('show');
       $timeout(function() { vm.dismiss(alert); }, 10000);
     }, 1);
@@ -21,7 +21,7 @@ function AlertController(AlertService, $timeout) {
 
   function dismiss(alert) {
     $('.alert-' + alert.index).collapse('hide');
-    $timeout(function() { AlertService.remove(alert.index); }, 1000);
+    return $timeout(function() { AlertService.remove(alert.index); }, 1000);
   }
 }
 

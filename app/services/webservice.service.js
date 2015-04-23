@@ -5,12 +5,14 @@
 angular.module('simCityWebApp').
   service('SimCityWebService', SimCityWebService);
 
-SimCityWebService.$inject = ['$http', 'MessageBus'];
-function SimCityWebService($http, MessageBus) {
+SimCityWebService.$inject = ['$http', 'MessageBus', '$q'];
+function SimCityWebService($http, MessageBus, $q) {
   var vm = this;
 
   vm.deleteTask = deleteTask;
+  vm.getSimulation = getSimulation;
   vm.getTask = getTask;
+  vm.overview = overview;
   vm.submitJob = submitJob;
   vm.submitTask = submitTask;
   vm.viewTasks = viewTasks;
@@ -37,7 +39,16 @@ function SimCityWebService($http, MessageBus) {
         MessageBus.publish('task.submitted', task);
       })
       .error(function(data, status, headers, config, statusText) {
-        MessageBus.publish('task.failed', formatHTTPError(data, status, statusText, 'error starting simulation'));
+        var detailedMessage = formatHTTPError(data, status, statusText, 'error starting simulation');
+        var message = 'Cannot add \'' + params.name + '\'';
+        if (status === 400 && data && data.error) {
+          message += ': ' + data.error;
+        } else if (status === 500){
+          message += ': internal server error';
+        } else if (status === 502){
+          message += ': cannot reach database';
+        }
+        return $q.reject(message, detailedMessage);
       });
   }
 
@@ -47,6 +58,10 @@ function SimCityWebService($http, MessageBus) {
 
   function getTask(id) {
     return $http.get('/explore/simulation/' + id);
+  }
+
+  function getSimulation(name, version) {
+    return $http.get('/explore/simulate/' + name + '/' + version);
   }
 
   function deleteTask(id, rev) {
@@ -61,7 +76,35 @@ function SimCityWebService($http, MessageBus) {
       headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
     });
   }
+
+  function overview() {
+    return $http.get('/explore/view/totals')
+      .then(function(response) {
+        return {
+          tasks: [
+            {name: 'queued',     value: response.data.todo},
+            {name: 'processing', value: response.data.locked},
+            {name: 'done',       value: response.data.done},
+            {name: 'with error', value: response.data.error},
+          ],
+          jobs: [
+            {name: 'active',     value: response.data.active_jobs},
+            {name: 'pending',    value: response.data.pending_jobs},
+            {name: 'finished',   value: response.data.finished_jobs},
+          ],
+        };
+      }, function(response) {
+        var status;
+        if (response.status === 0) {
+          status = '';
+        } else {
+          status = '(code ' + response.status + ')';
+        }
+        return $q.reject('Cannot load infrastructure overview ' + status);
+      });
+  }
 }
+
 
 function formatHTTPError(data, status, statusText, defaultMsg) {
   var msg = data.error || defaultMsg;

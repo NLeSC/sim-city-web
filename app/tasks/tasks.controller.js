@@ -3,7 +3,6 @@
 
 angular.module('simCityWebApp')
   .controller('TaskListCtrl', TaskListController);
-  // .controller('RemoveTaskModalInstanceCtrl', RemoveTaskModalInstanceController);
 
 TaskListController.$inject = ['MessageBus', 'LayerService', 'SimCityWebService', '$interval', 'AlertService', 'RangeFactory'];
 function TaskListController(MessageBus, LayerService, WebService, $interval, AlertService, RangeFactory) {

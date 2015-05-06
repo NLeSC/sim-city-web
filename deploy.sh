@@ -1,4 +1,20 @@
 #!/bin/bash
+# Deploy website to the webserver
+#
+# The webserver is assumed to be configured with ssh/scp with hostname
+# sim-city. The username, hostname and SSH key must be pre-configured in
+# "~/.ssh/config".
+#
+# The sim-city host is assumed to have the following writable directories:
+# /srv/staging/app/ and /srv/https/app/
+# The latter directory is assumed to be served by the webserver on sim-city.
+# The webserver must be configured to follow symlinks.
+#
+# Deployment will fail if the same staging name is used twice. If the staging
+# name is not specified, it will fail if the same git commit is deployed
+# twice. This entices users to commit all changes before deployment.
+#
+# Use different release names to indicate development or tag deployments.
 
 RELEASENAME=current
 NAME=$(git rev-parse HEAD)

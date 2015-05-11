@@ -11,9 +11,9 @@
  */
 angular.module('simCityWebApp').controller('MapCtrl', MapController);
 
-MapController.$inject = ['$scope', '$http', 'LayerService'];
+MapController.$inject = ['LayerService'];
 
-function MapController($scope, $http, LayerService) {
+function MapController(LayerService) {
   var vm = this;
 
   vm.bangalore = {
@@ -34,22 +34,10 @@ function MapController($scope, $http, LayerService) {
         minZoom: 4,
         projection: 'EPSG:3857',
       },
-      // events: {
-      //   layers: ['mousemove'],
-      // },
     };
   vm.layerService = LayerService;
   vm.showLayers = [];
 
-  // $scope.$on('openlayers.layers.task_full_matsim_0.3_volume.mousemove', function(event, feature) {
-  //   if (!feature) {
-  //     return;
-  //   }
-  //   $scope.$apply(function() {
-  //     vm.volume = feature.getProperties().volume;
-  //   });
-  // });
-  //
   var blr_roads = {
     name: 'blr_roads',
     title: 'Bangalore road network',

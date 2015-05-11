@@ -7,14 +7,31 @@ angular.module('simCityWebApp').
 RangeFactory.$inject = [];
 function RangeFactory() {
   return {
-    colorConverter: function(minValue, maxValue, minHue, maxHue) {
+    colorConverter: function(minValue, maxValue, minHue, maxHue, bins, outputConstructor) {
       var converter = new RangeConverter(minValue, maxValue, minHue, maxHue);
 
+      this.values = [];
+
       this.convert = function(value) {
-        var hue = converter.convert(value);
-        var rgb = hsvToRgb(hue, 1, 1);
-        return rgbToHex(rgb.r, rgb.g, rgb.b);
+        var idx = Math.floor(bins * (value - minValue) / (maxValue - minValue));
+        idx = Math.max(0, Math.min(bins, idx));
+        return this.values[idx];
       };
+
+      var binsize = Math.floor((maxValue - minValue) / bins);
+      var binExtra = (maxValue - minValue) % bins;
+      var idx = minValue;
+      for (var i = 0; i <= bins; i++) {
+        var hue = converter.convert(idx);
+        var rgb = hsvToRgb(hue, 1, 1);
+        var output = rgbToHex(rgb.r, rgb.g, rgb.b);
+
+        this.values.push(outputConstructor(output));
+        idx += binsize;
+        if (i < binExtra) {
+          idx += 1;
+        }
+      }
     },
     rangeConverter: RangeConverter,
   };

@@ -21,15 +21,18 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
   MessageBus.subscribe('task.submitted', updateView);
   $interval(updateView, 10000);
 
-  var volumeColor = new RangeFactory.colorConverter(0, 100, 0.2, 0.0);
+  var volumeColor = new RangeFactory.colorConverter(0, 100, 0.2, 0.0, 25,
+    function(color) {
+      return [ new ol.style.Style({
+         stroke: new ol.style.Stroke({
+           color: color,
+           width: 4,
+         })
+       }) ];
+    });
   var volumeStyle = function(feature) {
-    return [ new ol.style.Style({
-       stroke: new ol.style.Stroke({
-         color: volumeColor.convert(feature.getProperties().volume),
-         width: 4,
-       })
-     }) ];
-   };
+    return volumeColor.convert(feature.getProperties().volume);
+  };
 
   function visualizeTraffic(task) {
     var layerId = LayerService.addVectorLayer({
@@ -44,15 +47,20 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
     LayerService.activateLayer(layerId);
   }
 
-  var fireColor = new RangeFactory.colorConverter(0, 200, 0.4, 0.7);
+  var fireColor = new RangeFactory.colorConverter(0, 200, 0.4, 0.7, 25,
+    function(color) {
+      return [
+        new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: color,
+            width: 4,
+          }),
+        })
+      ];
+    });
   var fireStyle = function(feature) {
-    return [ new ol.style.Style({
-       stroke: new ol.style.Stroke({
-         color: fireColor.convert(feature.getProperties().responsetime),
-         width: 4,
-       })
-     }) ];
-   };
+    return fireColor.convert(feature.getProperties().responsetime);
+  };
 
   function visualizeFire(task) {
     var layerId = LayerService.addVectorLayer({

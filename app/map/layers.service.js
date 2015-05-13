@@ -4,23 +4,27 @@
 angular.module('simCityWebApp').
   service('LayerService', LayerService);
 
-LayerService.$inject = ['$http'];
-function LayerService($http) {
+LayerService.$inject = ['$http', 'MessageBus', '$timeout'];
+function LayerService($http, MessageBus, $timeout) {
   var vm = this;
 
   vm.activeBaseLayer = undefined;
   vm.activeLayers = [];
   vm.activateLayer = activateLayer;
+  vm.activateOverlay = activateOverlay;
   vm.addBaseLayer = addBaseLayer;
   vm.addImageLayer = addImageLayer;
-  vm.addVectorLayer = addVectorLayer;
   vm.addLayersFromOWS = addLayersFromOWS;
+  vm.addVectorLayer = addVectorLayer;
   vm.baseLayers = [];
   vm.deactivateLayer = deactivateLayer;
-  vm.getVectorLayer = getVectorLayer;
+  vm.deactivateOverlay = deactivateOverlay;
   vm.getImageLayer = getImageLayer;
+  vm.getVectorLayer = getVectorLayer;
+  vm.getLayer = getLayer;
   vm.inactiveLayers = [];
   vm.moveActiveLayer = moveActiveLayer;
+  vm.overlay = {};
   vm.removeVectorLayer = removeVectorLayer;
   vm.removeImageLayer = removeImageLayer;
   vm.selectBaseLayer = selectBaseLayer;
@@ -75,6 +79,9 @@ function LayerService($http) {
     if (layer) {
       insertSorted(layer, vm.inactiveLayers);
       updateLayers();
+    }
+    if (vm.overlay && vm.overlay.name === layerId) {
+      deactivateOverlay();
     }
   }
 
@@ -142,8 +149,7 @@ function LayerService($http) {
     return addLayer(layer, 'Vector');
   }
 
-  function getLayer(name, type) {
-    var layerId = name + '_' + type;
+  function getLayer(layerId) {
     var idx = indexOf(layerId, vm.activeLayers);
     if (idx !== -1) {
       return vm.activeLayers[idx];
@@ -155,10 +161,10 @@ function LayerService($http) {
   }
 
   function getImageLayer(name) {
-    return getLayer(name, 'Image');
+    return getLayer(name + '_Image');
   }
   function getVectorLayer(name) {
-    return getLayer(name, 'Vector');
+    return getLayer(name + '_Vector');
   }
 
   function removeLayer(name, type) {
@@ -215,6 +221,19 @@ function LayerService($http) {
     var idx = indexOf(layerId, vm.baseLayers);
     vm.activeBaseLayer = vm.baseLayers[idx];
     updateLayers();
+  }
+
+  function activateOverlay(layerId, propertyFn) {
+    // First process the activate layer, otherwise nothing shows...
+    $timeout(function() {
+      MessageBus.publish('layer.overlay.activate', {
+        name: layerId,
+        callback: propertyFn,
+      });
+    }, 1);
+  }
+  function deactivateOverlay() {
+    MessageBus.publish('layer.overlay.deactivate', null);
   }
 }
 

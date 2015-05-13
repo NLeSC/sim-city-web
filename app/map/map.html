@@ -2,3 +2,12 @@
     <!-- <ol-layer ol-layer-properties="vm.layerService.activeBaseLayer"></ol-layer> -->
     <ol-layer ol-layer-properties="layer" ng-repeat="layer in vm.layerService.showLayers track by layer.id"></ol-layer>
 </openlayers>
+
+<div id="map-overlay-info" ng-show="vm.overlayDeregister">
+  <table>
+    <tr ng-repeat="property in vm.overlayProperties track by property.name">
+      <td ng-bind-template="{{property.name}}:"></td>
+      <td ng-bind="property.value"></td>
+    </tr>
+  </table>
+</div>

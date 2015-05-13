@@ -45,6 +45,16 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
       style: volumeStyle,
     });
     LayerService.activateLayer(layerId);
+    LayerService.activateOverlay(layerId, function(feature) {
+      if (feature) {
+        return [{
+          name: 'volume',
+          value: feature.getProperties().volume
+        }];
+      } else {
+        return [];
+      }
+    });
   }
 
   var fireColor = new RangeFactory.colorConverter(0, 200, 0.4, 0.7, 25,
@@ -73,6 +83,16 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
       style: fireStyle,
     });
     LayerService.activateLayer(layerId);
+    LayerService.activateOverlay(layerId, function(feature) {
+      if (feature) {
+        return [{
+          name: 'response time',
+          value: feature.getProperties().responsetime
+        }];
+      } else {
+        return [];
+      }
+    });
     var fireLayer = LayerService.getVectorLayer('blr_fires');
     if (fireLayer) {
       fireLayer.style = {

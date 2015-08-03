@@ -6,17 +6,27 @@
         <label class="control-label col-sm-4" for="param-{{param.name}}" ng-bind="param.title || param.name"></label>
         <div class="col-sm-8">
           <div ng-switch="param.type">
-          <!-- Interval -->
-            <div ng-switch-when="interval" ng-switch="param.dtype">
-              <input ng-switch-when="str" type="text" ng-model="vm.input[param.name]" id="param-{{param.name}}" name="{{param.name}}" class="form-control">
-              <input ng-switch-default type="number" min="{{param.min}}" max="{{param.max}}" ng-model="vm.input[param.name]" id="param-{{param.name}}" class="form-control">
-            </div>
+            <!-- Interval -->
+            <input ng-switch-when="interval"  type="number" min="{{param.min}}" max="{{param.max}}" ng-model="vm.input[param.name]" id="param-{{param.name}}" class="form-control">
+            <input ng-switch-when="number"  type="number" min="{{param.min}}" max="{{param.max}}" ng-model="vm.input[param.name]" id="param-{{param.name}}" class="form-control">
             <!-- Choice -->
             <select ng-switch-when="choice" ng-options="choice for choice in param.choices" ng-model="vm.input[param.name]" id="param-{{param.name}}" class="form-control"></select>
-            <!-- Choice -->
+            <!-- String -->
             <input ng-switch-when="str" type="text" ng-model="vm.input[param.name]" id="param-{{param.name}}" class="form-control"></select>
+            <input ng-switch-when="string" type="text" ng-model="vm.input[param.name]" id="param-{{param.name}}" class="form-control"></select>
+            <!-- List -->
+            <div ng-switch-when="list" ng-switch="param.contents.type">
+              <div ng-switch-when="point2d">
+                <button ng-click="vm.activatePoint2DLayer(param.name)">Edit points</button>
+                <button ng-click="vm.resetPoint2DLayer(param.name)">Reset points</button>
+                <select ng-options="layer as layer.title for layer in vm.layerService.activeLayers | filter:{contentType:'Vector'} track by layer.id" ng-model="vm.copyLayerPoints[param.name]" class="form-control"></select>
+                <button ng-click="vm.copyPoint2DLayer(param.name)" ng-disabled="!vm.copyLayerPoints[param.name]">Copy points from layer</button>
+              </div>
+              <p ng-switch-default class="danger">{{param.contents.type}} list input type not supported</p>
+            </div>
+            <p ng-switch-default class="danger">{{param.type}} input type not supported</p>
           </div>
-          <p class="help-block" ng-bind="param.description"></p>
+          <p class="help-block" ng-bind-template="{{param.description}} (number of points: {{param.min_length || 0}} - {{param.max_length || '&infin;'}})"></p>
         </div>
       </div>
     </div>

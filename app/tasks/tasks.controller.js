@@ -118,7 +118,7 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
   }
 
   function updateView() {
-    return WebService.viewTasks('matsim', '0.3')
+    return WebService.viewTasks('matsim', '0.4', 'fireInWards')
       .success(function(data) {
         vm.tasks = data.rows.map(function(el) { return el.value; });
         if (vm.status) {

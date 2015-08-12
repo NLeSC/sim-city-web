@@ -13,15 +13,19 @@ function LayerService($http, MessageBus, $timeout) {
   vm.activateLayer = activateLayer;
   vm.activateOverlay = activateOverlay;
   vm.addBaseLayer = addBaseLayer;
+  vm.addFeatures = addFeatures;
   vm.addImageLayer = addImageLayer;
   vm.addLayersFromOWS = addLayersFromOWS;
   vm.addVectorLayer = addVectorLayer;
   vm.baseLayers = [];
+  vm.createLayer = createLayer;
   vm.deactivateLayer = deactivateLayer;
   vm.deactivateOverlay = deactivateOverlay;
+  vm.editPointLayer = editPointLayer;
   vm.getImageLayer = getImageLayer;
   vm.getVectorLayer = getVectorLayer;
   vm.getLayer = getLayer;
+  vm.getFeatures = getFeatures;
   vm.inactiveLayers = [];
   vm.moveActiveLayer = moveActiveLayer;
   vm.overlay = {};
@@ -215,6 +219,35 @@ function LayerService($http, MessageBus, $timeout) {
         }
       });
     }
+
+  function getFeatures(layerId) {
+    var source = getLayer(layerId).getSource();
+    return source.getFeatures();
+  }
+
+  function addFeatures(layerId, features) {
+    getLayer(layerId).addFeatures(features);
+  }
+
+  function createLayer(layer, style) {
+    return addVectorLayer({
+      name: layer.name,
+      title: layer.title || layer.name,
+      properties: layer.properties,
+      source: layer.source || {
+        type: 'GeoJSON',
+        features: [],
+      },
+      style: style,
+    });
+  }
+
+  function editPointLayer(layerId) {
+    // TODO: enable edit mode for this layer
+    // The layer has a 'properties' attribute with specifications as in
+    // parameters.html. Each feature should have a properties object with the
+    // input data.
+  }
 
   function selectBaseLayer(layerId) {
     // unfortunately, directly selecting does not trigger an update.

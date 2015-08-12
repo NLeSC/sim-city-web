@@ -10,7 +10,7 @@ ParameterListController.$inject = ['SimCityWebService', 'AlertService'];
 
 function ParameterListController(SimCityWebService, AlertService) {
   var vm = this;
-  var version = '0.3';
+  var version = '0.4';
   var simulation = 'matsim';
   vm.startSimulation = startSimulation;
   vm.input = {};

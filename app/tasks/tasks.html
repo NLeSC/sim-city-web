@@ -4,7 +4,7 @@
   <tr>
   <tr ng-hide="vm.status">
     <th>name</th>
-    <th>commute percentage</th>
+    <th>fire ID</th>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
@@ -12,7 +12,7 @@
   </tr>
   <tr ng-hide="vm.status" ng-repeat="task in vm.tasks track by task.id | orderBy : task.input.commute-percentage">
     <td ng-bind="task.input['name']"></td>
-    <td ng-bind="task.input['commute-percentage']"></td>
+    <td ng-bind="task.input['fires'][0]['id']"></td>
     <td ng-switch="task.done">
       <span ng-switch-when="-1" title="simulation error" class="glyphicon glyphicon-warning-sign"></span>
       <span ng-switch-when="0" title="no output" class="glyphicon glyphicon-eye-close"></span>

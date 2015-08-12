@@ -53,10 +53,10 @@
 
     <div ng-include="'alert/alert.html'" ng-controller="AlertCtrl as vm"></div>
 
-    <div id="overview-panel" class="panel-group pull-right" id="accordion" role="tablist">
+    <div id="overview-panel" class="panel-group pull-right" role="tablist">
       <div id="infrastructure-panel" class="panel panel-default">
         <div class="panel-heading" role="tab">
-          <h3 class="panel-title"><a data-parent="#accordion" data-toggle="collapse" href="#infrastructure-body"><span class="glyphicon glyphicon-dashboard"></span> Infrastructure</a></h3>
+          <h3 class="panel-title"><a data-parent="#overview-panel" data-toggle="collapse" href="#infrastructure-body"><span class="glyphicon glyphicon-dashboard"></span> Infrastructure</a></h3>
         </div>
         <div id="infrastructure-body" class="collapse" role="tabpanel">
           <div ng-include="'infrastructure/overview.html'" ng-controller="OverviewCtrl as vm"></div>
@@ -65,7 +65,7 @@
       </div>
       <div id="layers-panel" class="panel panel-default">
         <div class="panel-heading" role="tab">
-          <h3 class="panel-title"><a data-parent="#accordion" data-toggle="collapse" href="#layers-body"><span class="glyphicon glyphicon-picture"></span> Layers</a></h3>
+          <h3 class="panel-title"><a data-parent="#overview-panel" data-toggle="collapse" href="#layers-body"><span class="glyphicon glyphicon-picture"></span> Layers</a></h3>
         </div>
         <div id="layers-body" class="collapse in">
           <div ng-include="'map/layers.html'" ng-controller="LayerCtrl as vm"></div>
@@ -73,20 +73,20 @@
       </div>
     </div>
 
-    <div id="simulation-panel" class="panel-group pull-left">
+    <div id="simulation-panel" class="panel-group pull-left" role="tablist">
       <div id="task-panel" class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Simulations</h3>
+        <div class="panel-heading" role="tab">
+          <h3 class="panel-title"><a data-parent="#simulation-panel" data-toggle="collapse" href="#tasklist-body">Simulations</a></h3>
         </div>
-        <div class="panel-body">
+        <div id="tasklist-body" class="panel-body collapse" role="tabpanel">
           <div ng-include="'tasks/tasks.html'" ng-controller="TaskListCtrl as vm"></div>
         </div>
       </div>
       <div id="newtask-panel" class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">New simulation</h3>
+        <div class="panel-heading" role="tab">
+          <h3 class="panel-title"><a data-parent="#simulation-panel" data-toggle="collapse" href="#newtask-body">New simulation</a></h3>
         </div>
-        <div class="panel-body">
+        <div id="newtask-body" class="panel-body collapse" role="tabpanel">
           <div ng-include="'tasks/parameters.html'" ng-controller="ParameterListCtrl as vm"></div>
         </div>
       </div>

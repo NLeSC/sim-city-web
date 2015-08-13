@@ -17,16 +17,18 @@
             <!-- List -->
             <div ng-switch-when="list" ng-switch="param.contents.type">
               <div ng-switch-when="point2d">
-                <button ng-click="vm.activatePoint2DLayer(param.name)">Edit points</button>
-                <button ng-click="vm.resetPoint2DLayer(param.name)">Reset points</button>
+                <button class="btn" ng-show="vm.editing !== param.name" ng-click="vm.activatePoint2DLayer(param.name, $index)">Edit</button>
+                <button class="btn btn-primary" ng-show="vm.editing === param.name" ng-click="vm.deactivatePoint2DLayer()">Done</button>
+                <button class="btn" ng-click="vm.resetPoint2DLayer(param.name)" ng-disabled="!vm.layerPoints.hasOwnProperty(param.name)">Reset</button>
                 <select ng-options="layer as layer.title for layer in vm.layerService.activeLayers | filter:{contentType:'Vector'} track by layer.id" ng-model="vm.copyLayerPoints[param.name]" class="form-control"></select>
-                <button ng-click="vm.copyPoint2DLayer(param.name)" ng-disabled="!vm.copyLayerPoints[param.name]">Copy points from layer</button>
+                <button class="btn" ng-click="vm.copyPoint2DLayer(param.name, $index)" ng-disabled="!vm.copyLayerPoints[param.name]">Copy from layer</button>
+                <p>Points selected: {{vm.pointsSelected(param.name)}}</p>
               </div>
               <p ng-switch-default class="danger">{{param.contents.type}} list input type not supported</p>
             </div>
             <p ng-switch-default class="danger">{{param.type}} input type not supported</p>
           </div>
-          <p class="help-block" ng-bind-template="{{param.description}} (number of points: {{param.min_length || 0}} - {{param.max_length || '&infin;'}})"></p>
+          <p class="help-block" ng-bind-template="{{param.description}}"></p>
         </div>
       </div>
     </div>

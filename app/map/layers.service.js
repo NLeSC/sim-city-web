@@ -21,7 +21,6 @@ function LayerService($http, MessageBus, $timeout) {
   vm.createLayer = createLayer;
   vm.deactivateLayer = deactivateLayer;
   vm.deactivateOverlay = deactivateOverlay;
-  vm.editPointLayer = editPointLayer;
   vm.getImageLayer = getImageLayer;
   vm.getVectorLayer = getVectorLayer;
   vm.getLayer = getLayer;
@@ -31,8 +30,10 @@ function LayerService($http, MessageBus, $timeout) {
   vm.overlay = {};
   vm.removeVectorLayer = removeVectorLayer;
   vm.removeImageLayer = removeImageLayer;
+  vm.removeLayer = removeLayer;
   vm.selectBaseLayer = selectBaseLayer;
   vm.showLayers = [];
+  vm.unsetFeatures = unsetFeatures;
 
   vm.addBaseLayer({
     name: 'toner',
@@ -171,17 +172,16 @@ function LayerService($http, MessageBus, $timeout) {
     return getLayer(name + '_Vector');
   }
 
-  function removeLayer(name, type) {
-    var layerId = name + '_' + type;
+  function removeLayer(layerId) {
     return (remove(layerId, vm.activeLayers) ||
             remove(layerId, vm.inactiveLayers));
   }
 
   function removeImageLayer(name) {
-    return removeLayer(name, 'Image');
+    return removeLayer(name + '_Image');
   }
   function removeVectorLayer(name) {
-    return removeLayer(name, 'Vector');
+    return removeLayer(name + '_Vector');
   }
 
   function addLayersFromOWS(url) {
@@ -221,32 +221,56 @@ function LayerService($http, MessageBus, $timeout) {
     }
 
   function getFeatures(layerId) {
-    var source = getLayer(layerId).getSource();
-    return source.getFeatures();
+    return getLayer(layerId).source.geojson.object.features;
   }
 
   function addFeatures(layerId, features) {
-    getLayer(layerId).addFeatures(features);
-  }
-
-  function createLayer(layer, style) {
-    return addVectorLayer({
-      name: layer.name,
-      title: layer.title || layer.name,
-      properties: layer.properties,
-      source: layer.source || {
-        type: 'GeoJSON',
-        features: [],
-      },
-      style: style,
+    MessageBus.publish('map.update', function() {
+      var layer = getLayer(layerId);
+      layer.source = {
+          type: 'GeoJSON',
+          geojson: {
+              // projection: 'EPSG:4326',
+              object: {
+                type: 'FeatureCollection',
+                features: layer.source.geojson.object.features.concat(features),
+              },
+          },
+      };
     });
   }
 
-  function editPointLayer(layerId) {
-    // TODO: enable edit mode for this layer
-    // The layer has a 'properties' attribute with specifications as in
-    // parameters.html. Each feature should have a properties object with the
-    // input data.
+  function unsetFeatures(layerId) {
+    getLayer(layerId).source = {
+        type: 'GeoJSON',
+        geojson: {
+            // projection: 'EPSG:4326',
+            object: {
+              type: 'FeatureCollection',
+              features: [],
+            },
+        }
+      };
+  }
+
+  function createLayer(layer, style) {
+    var vectorLayer = addVectorLayer({
+      name: layer.name,
+      title: layer.title || layer.name,
+      properties: layer.properties || {},
+      source: layer.source || {
+        type: 'GeoJSON',
+        geojson: {
+          // projection: 'EPSG:3857',
+          object: {
+            type: 'FeatureCollection',
+            features: [],
+          },
+        },
+      },
+      style: style,
+    });
+    return vectorLayer;
   }
 
   function selectBaseLayer(layerId) {

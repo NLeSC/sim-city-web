@@ -36,11 +36,13 @@ function MapController($scope, LayerService, olData, MessageBus) {
       },
       events: {
         layers: [ 'click' ],
+        map: [ 'singleclick' ],
       },
     };
   vm.layerService = LayerService;
   vm.overlayDeregister = null;
   vm.showLayers = [];
+  vm.clickListeners = {};
 
   var blr_roads = {
     name: 'blr_roads',
@@ -57,8 +59,12 @@ function MapController($scope, LayerService, olData, MessageBus) {
   LayerService.addImageLayer(blr_roads);
   LayerService.addLayersFromOWS('/geoserver/Bangalore/ows');
 
+  listenForClicks();
   MessageBus.subscribe('layer.overlay.activate', showOverlay);
   MessageBus.subscribe('layer.overlay.deactivate', hideOverlay);
+  MessageBus.subscribe('map.click.listen', addClickListener);
+  MessageBus.subscribe('map.click.stop', removeClickListener);
+  MessageBus.subscribe('map.update', updateMap);
 
   function hideOverlay() {
     if (vm.overlayDeregister !== null) {
@@ -115,6 +121,29 @@ function MapController($scope, LayerService, olData, MessageBus) {
           overlay.setPosition(map.getEventCoordinate(olEvent));
         });
       });
+  }
+
+  function listenForClicks() {
+    $scope.$on('openlayers.map.singleclick', function(event, data) {
+      $scope.$apply(function() {
+        for (var listener in vm.clickListeners) {
+          if (vm.clickListeners.hasOwnProperty(listener)) {
+            vm.clickListeners[listener](event, data);
+          }
+        }
+      });
+    });
+  }
+
+  function addClickListener(event, data) {
+    vm.clickListeners[data.id] = data.callback;
+  }
+  function removeClickListener(event, id) {
+    delete vm.clickListeners[id];
+  }
+
+  function updateMap(event, callback) {
+    callback();
   }
 }
 

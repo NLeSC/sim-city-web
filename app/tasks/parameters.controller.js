@@ -59,7 +59,6 @@ function ParameterListController(SimCityWebService, AlertService, LayerService, 
       id: paramName,
       callback: function(event, data) {
         var p = ol.proj.transform([data.lon, data.lat], 'EPSG:3857', 'EPSG:4326');
-        console.log(p);
         MessageBus.publish('map.update', function() {
         LayerService.addFeatures(vm.layerPoints[paramName].layer, [
           {
@@ -72,7 +71,6 @@ function ParameterListController(SimCityWebService, AlertService, LayerService, 
         ], vm.parameters[index].icon ?
           { icon: { src: vm.parameters[index].icon }} :
           null);
-        console.log(LayerService.getLayer(vm.layerPoints[paramName].layer));
         });
       }});
     vm.editing = paramName;
@@ -156,15 +154,13 @@ function ParameterListController(SimCityWebService, AlertService, LayerService, 
       if (vm.layerPoints.hasOwnProperty(key)) {
         var features = LayerService.getFeatures(vm.layerPoints[key].layer);
         features.map(function(feature) {
-          console.log(param);
           var paramProps = param.contents.properties || [];
           var elProps = features.properties || {};
           var props = {};
           paramProps.map(function(prop){
-            console.log(prop);
             props[prop.name] = (elProps.hasOwnProperty(prop.name) ?
                                elProps[prop.name] :
-                               ((prop.type === 'str' || prop.type === 'string') ? ' ' : 0));
+                               ((prop.type === 'str' || prop.type === 'string') ? '' : 0));
           });
 
           vm.input[key].push({

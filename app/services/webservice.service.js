@@ -32,7 +32,7 @@ function SimCityWebService($http, MessageBus, $q) {
   }
 
   function submitTask(model, params) {
-    return _http('POST', '/explore/simulate/' + model, params)
+    return $http({method: 'POST', url: '/explore/simulate/' + model, data: params})
       .success(function(data, status, headers) {
         var task = {url: headers('Location')};
         task.name = task.url.substr(task.url.lastIndexOf('/') + 1);

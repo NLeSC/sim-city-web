@@ -52,8 +52,8 @@ function SimCityWebService($http, MessageBus, $q) {
       });
   }
 
-  function viewTasks(simulation, version, ensemble) {
-    return $http.get('/explore/view/simulations/' + simulation + '/' + version + '/' + ensemble);
+  function viewTasks(simulation, version) {
+    return $http.get('/explore/view/simulations/' + simulation + '/' + version);
   }
 
   function getTask(id) {

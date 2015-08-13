@@ -63,7 +63,7 @@ li.selected {
     -moz-box-shadow:    4px 4px 5px 0px rgba(50, 50, 50, 0.75);
     box-shadow:         4px 4px 5px 0px rgba(50, 50, 50, 0.75);
     color: #111;
-    font-size: 32px;
+    font-size: 20px;
     position: absolute;
     bottom: 1em;
     left: 1em;
@@ -84,7 +84,7 @@ li.selected {
     border-right-color: inherit;
     position: absolute;
     left: -8px;
-    top: 20px;
+    bottom: 20px;
 }
 
 .layer-controls {

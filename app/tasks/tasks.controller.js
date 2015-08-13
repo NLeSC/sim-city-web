@@ -37,7 +37,7 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
   function visualizeTraffic(task) {
     var layerId = LayerService.addVectorLayer({
       name: task.id + '_volume',
-      title: '\'' + task.input.name + '\' link volume',
+      title: '\'' + task.input.fires[0].id + '\' link volume',
       source: {
         type: 'GeoJSON',
         url: task.url + '/GeoLinkVolume.8.json',
@@ -57,7 +57,7 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
     });
   }
 
-  var fireColor = new RangeFactory.colorConverter(0, 200, 0.4, 0.7, 25,
+  var fireColor = new RangeFactory.colorConverter(300, 1800, 0.4, 0.7, 25,
     function(color) {
       return [
         new ol.style.Style({
@@ -75,7 +75,7 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
   function visualizeFire(task) {
     var layerId = LayerService.addVectorLayer({
       name: task.id + '_fire_path',
-      title: '\'' + task.input.name + '\' fire engine paths',
+      title: '\'' + task.input.fires[0].id + '\' fire engine paths',
       source: {
         type: 'GeoJSON',
         url: task.url + '/GeoFirePaths.json',
@@ -93,15 +93,15 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
         return [];
       }
     });
-    var fireLayer = LayerService.getVectorLayer('blr_fires');
-    if (fireLayer) {
-      fireLayer.style = {
-        icon: {
-          src: 'images/fire.png'
-        },
-      };
-      LayerService.activateLayer(fireLayer.id);
-    }
+    // var fireLayer = LayerService.getVectorLayer('blr_fires');
+    // if (fireLayer) {
+    //   fireLayer.style = {
+    //     icon: {
+    //       src: 'images/fire.png'
+    //     },
+    //   };
+    //   LayerService.activateLayer(fireLayer.id);
+    // }
     var firestationLayer = LayerService.getVectorLayer('blr_firestations');
     if (firestationLayer) {
       firestationLayer.style = {
@@ -118,7 +118,7 @@ function TaskListController(MessageBus, LayerService, WebService, $interval, Ale
   }
 
   function updateView() {
-    return WebService.viewTasks('matsim', '0.4', 'fireInWards')
+    return WebService.viewTasks('matsim', '0.4')
       .success(function(data) {
         vm.tasks = data.rows.map(function(el) { return el.value; });
         if (vm.status) {

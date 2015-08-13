@@ -80,7 +80,7 @@ function MapController($scope, LayerService, olData, MessageBus) {
       var overlay = new ol.Overlay({
           element: document.getElementById('map-overlay-info'),
           positioning: 'center-center',
-          offset: [-25, 59],
+          offset: [-15, 50],
           position: [0, 0]
       });
 
@@ -97,7 +97,7 @@ function MapController($scope, LayerService, olData, MessageBus) {
             if (feature) {
               var p = feature.getProperties();
               for (var key in p) {
-                if (key !== 'geometry' && p.hasOwnProperty(key)) {
+                if (key === 'volume' || key === 'responsetime' || key === 'name') {
                   vm.overlayProperties.push({
                     name: key,
                     value: p[key],

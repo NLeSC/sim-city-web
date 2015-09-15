@@ -152,15 +152,31 @@ function ParameterListController(SimCityWebService, AlertService, LayerService, 
     if (param.type === 'list' && param.contents.type === 'point2d') {
       vm.input[key] = [];
       if (vm.layerPoints.hasOwnProperty(key)) {
+        var defaults = {};
+        var paramProps = param.contents.properties || [];
+        paramProps.map(function(prop) {
+          if (prop.hasOwnProperty('default')) {
+            defaults[prop.name] = prop.default;
+          } else if (prop.type === 'str' || prop.type === 'string') {
+            var len = prop.min_length || 0;
+            var spaces = '   ';
+            while (len > spaces.length) {
+              spaces = spaces + spaces;
+            }
+            defaults[prop.name] = spaces.substr(0, len);
+          } else if (prop.type === 'interval' || prop.type === 'number') {
+            defaults[prop.name] = prop.min || prop.max || 0;
+          }
+        });
+
         var features = LayerService.getFeatures(vm.layerPoints[key].layer);
+        
         features.map(function(feature) {
-          var paramProps = param.contents.properties || [];
-          var elProps = features.properties || {};
+          var elProps = feature.properties || {};
           var props = {};
-          paramProps.map(function(prop){
+          paramProps.map(function(prop) {
             props[prop.name] = (elProps.hasOwnProperty(prop.name) ?
-                               elProps[prop.name] :
-                               ((prop.type === 'str' || prop.type === 'string') ? '' : 0));
+                               elProps[prop.name] : defaults[prop.name]);
           });
 
           vm.input[key].push({

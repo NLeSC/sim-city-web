@@ -35,7 +35,7 @@
         <h4 class="modal-title">Remove simulation</h4>
       </div>
       <div class="modal-body">
-        <p ng-bind-template="Are you sure you want to remove simulation '{{vm.toRemove.input['name']}}' (with id '{{vm.toRemove.id}}' and commute percentage {{vm.toRemove.input['commute-percentage']}})?"></p>
+        <p ng-bind-template="Are you sure you want to remove simulation '{{vm.toRemove.input['simulation']}}' (with id '{{vm.toRemove.id}}' from ensemble {{vm.toRemove.ensemble}})?"></p>
         <p ng-show="vm.removeError" ng-bind="vm.removeError" class="text-danger"></p>
       </div>
       <div class="modal-footer">

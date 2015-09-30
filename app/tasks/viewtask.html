@@ -4,7 +4,7 @@
       <div class="modal-header">
         <button class="close" data-dismiss="modal">&times;</button>
         <h3 ng-show="vm.status" class="modal-title" ng-bind="vm.status"></h3>
-        <h3 ng-hide="vm.status" class="modal-title" ng-bind-template="Simulation '{{vm.task.input.name}}'"></h3>
+        <h3 ng-hide="vm.status" class="modal-title" ng-bind-template="Simulation '{{vm.task.ensemble}} ({{vm.task.id}})'"></h3>
       </div>
       <div class="modal-body" ng-hide="vm.status">
         <h4>Input</h4>

@@ -27,8 +27,8 @@ function ParameterListController(SimCityWebService, AlertService, LayerService, 
   function startSimulation() {
       vm.submitstatus = 'loading';
       delete vm.errorMsg;
-      if (vm.input.name) {
-        vm.input._id = 'task_' + vm.input.name + '_' + simulation + '_' + version;
+      if (vm.input.simulation) {
+        vm.input._id = 'task_' + vm.input.simulation + '_' + simulation + '_' + version;
       }
       if (!collectPoints()) {
         return;
@@ -36,7 +36,7 @@ function ParameterListController(SimCityWebService, AlertService, LayerService, 
       SimCityWebService.submitTask('matsim/0.4', vm.input)
         .success(function() {
           vm.submitstatus = 'success';
-          AlertService.add('success', 'Added simulation \'' + vm.input.name + '\'');
+          AlertService.add('success', 'Added simulation \'' + vm.input.simulation + '\'');
         })
         .error(function(message, detailedMessage) {
           vm.errorMsg = detailedMessage.formatted;

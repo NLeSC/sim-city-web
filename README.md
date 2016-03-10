@@ -8,7 +8,20 @@ One way to achieve this is to run all services on their own port or host, and se
 
 ## Build & development
 
-Run `grunt` for building and `grunt serve` for a preview on port 9000. This preview does not include most dynamic elements since that requires the other services to run on the same port. Alternatively, a local nginx configuration can be set up to proxy all requested services to the local host (see for example `nginx.sample.conf`). Use `./deploy.sh` for deployment on the webserver. See the `deploy.sh` file for assumptions about the webserver configuration.
+Global dependencies are `node`, and npm packages `grunt-cli` and `bower`. To install npm dependencies, run
+```
+npm install -g grunt-cli bower
+gem install compass
+```
+
+To build the current project, run
+```
+npm install
+bower install
+grunt
+```
+
+Run `grunt serve` for a preview on port 9000. This preview does not include most dynamic elements since that requires the other services to run on the same port. Alternatively, a local nginx configuration can be set up to proxy all requested services to the local host (see for example `nginx.sample.conf`). Use `./deploy.sh` for deployment on the webserver. See the `deploy.sh` file for assumptions about the webserver configuration.
 
 The directory layout largely follows Yeoman AngularJS with Grunt, while largely using [the Angular Style Guide provided by John Papa](https://github.com/johnpapa/angular-styleguide)
 

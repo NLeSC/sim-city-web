@@ -149,56 +149,60 @@ function ParameterListController(SimCityWebService, AlertService, LayerService, 
 
   function collectPointsOfParam(param) {
     var key = param.name;
-    if (param.type === 'list' && param.contents.type === 'point2d') {
+    if (param.type === 'array') {
+      var paramProps = [];
+      for (var i = 0; i < param.items.allOf.length; i++) {
+        if (param.items.allOf[i].hasOwnProperty('properties')) {
+          paramProps += param.items.allOf[i].properties;
+        }
+      }
       vm.input[key] = [];
       if (vm.layerPoints.hasOwnProperty(key)) {
         var defaults = {};
-        var paramProps = param.contents.properties || [];
         paramProps.map(function(prop) {
           if (prop.hasOwnProperty('default')) {
             defaults[prop.name] = prop.default;
-          } else if (prop.type === 'str' || prop.type === 'string') {
-            var len = prop.min_length || 0;
+          } else if (prop.type === 'string') {
+            var len = prop.minLength || 0;
             var spaces = '   ';
             while (len > spaces.length) {
               spaces = spaces + spaces;
             }
             defaults[prop.name] = spaces.substr(0, len);
-          } else if (prop.type === 'interval' || prop.type === 'number') {
-            defaults[prop.name] = prop.min || prop.max || 0;
+          } else if (prop.type === 'integer' || prop.type === 'number') {
+            defaults[prop.name] = prop.mininum || prop.maximum || 0;
           }
         });
 
         var features = LayerService.getFeatures(vm.layerPoints[key].layer);
-        
+
         features.map(function(feature) {
           var elProps = feature.properties || {};
-          var props = {};
+          var props = {
+            x: feature.geometry.coordinates[0],
+            y: feature.geometry.coordinates[1]
+          };
           paramProps.map(function(prop) {
             props[prop.name] = (elProps.hasOwnProperty(prop.name) ?
                                elProps[prop.name] : defaults[prop.name]);
           });
 
-          vm.input[key].push({
-            x: feature.geometry.coordinates[0],
-            y: feature.geometry.coordinates[1],
-            properties: props,
-          });
+          vm.input[key].push(props);
         });
       } else {
-        if (param.min_length) {  // exists and not 0
+        if (param.minItems) {  // exists and not 0
           AlertService.add('error', 'no points selected for ' + (param.title || param.name) + ', select at least ' + param.min_length);
           return false;
         } else {
           AlertService.add('warning', 'no points selected for ' + (param.title || param.name));
         }
       }
-      if (param.min_length && vm.input[key].length < param.min_length) {
-        AlertService.add('error', 'please select at least ' + param.min_length + ' points for ' + (param.title || param.name) + ' (now ' + param.length + ')');
+      if (param.minItems && vm.input[key].length < param.minItems) {
+        AlertService.add('error', 'please select at least ' + param.minItems + ' points for ' + (param.title || param.name) + ' (now ' + param.length + ')');
         return false;
       }
-      if (param.max_length && vm.input[key].length > param.max_length) {
-        AlertService.add('error', 'please select at most ' + param.max_length + ' points for ' + (param.title || param.name) + ' (now ' + vm.input[key].length + ')');
+      if (param.maxItems && vm.input[key].length > param.maxItems) {
+        AlertService.add('error', 'please select at most ' + param.maxItems + ' points for ' + (param.title || param.name) + ' (now ' + vm.input[key].length + ')');
         return false;
       }
     }
